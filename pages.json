@@ -1,0 +1,236 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTitleText": " ",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTitleText": " ",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/my/setting/changePassword",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/my/setting/phoneConfirm",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "修改手机号"
+			}
+		},
+		{
+			"path": "pages/my/setting/phoneModify",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "修改手机号"
+			}
+		},
+		{
+			"path": "pages/my/setting/nameEdit",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "修改姓名"
+			}
+		},
+		{
+			"path": "pages/my/setting/profileEdit",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "编辑个人资料"
+			}
+		},
+		{
+			"path": "pages/my/setting/index",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/my/favorite",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "我的商机收藏"
+			}
+		},
+		{
+			"path": "pages/my/potentialCustomer",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "我的潜在客户"
+			}
+		},
+		{
+			"path": "pages/my/cooperativeCustomer",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "我的合作客户"
+			}
+		},
+		{
+			"path": "pages/customer/cooperativeDetail",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "合作客户详情"
+			}
+		},
+		{
+			"path": "pages/customer/potentialDetail",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "潜在客户详情"
+			}
+		},
+		{
+			"path": "pages/customer/customer",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "客户",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/business/business",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "商机",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/search/index",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "搜索结果"
+			}
+		},
+		{
+			"path": "pages/business/customerDetail",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "公海客户详情"
+			}
+		},
+		{
+			"path": "pages/business/tenderingDetail",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "企业招标详情"
+			}
+		},
+		{
+			"path": "pages/add/record",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "新增拜访记录"
+			}
+		},
+		{
+			"path": "pages/add/customer",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "新增潜在客户"
+			}
+		},
+		{
+			"path": "pages/login/resetPassword",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/login/findPassword",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "忘记密码"
+			}
+		},
+		{
+			"path": "components/tabbar/index",
+			"style": {}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "我的"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"custom": true,
+		"borderStyle": "black",
+		"backgroundColor": "#FFFFFF",
+		"color": "#8F8F94",
+		"selectedColor": "#f33e54",
+		// list仅提供路由功能，导航将使用自定义导航
+		"list": [{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/@2xshouye-2.png",
+				"selectedIconPath": "static/@2xshouye.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/business/business",
+				"iconPath": "static/@2xshangji-2.png",
+				"selectedIconPath": "static/@2xshangji.png",
+				"text": "商机"
+			},
+			{
+				"pagePath": "pages/customer/customer",
+				"iconPath": "static/@2xkehu-2.png",
+				"selectedIconPath": "static/@2xkehu.png",
+				"text": "客户"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "static/@2xwo-2.png",
+				"selectedIconPath": "static/@2xwode.png",
+				"text": "我的"
+			}
+		]
+	},
+	"usingComponents": "components/tabbar"
+}
