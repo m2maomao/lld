@@ -22,8 +22,8 @@ Vue.prototype.locationConvert = (province, city, district) => {
 }
 
 // 图片处理
-Vue.prototype.getImage = (url) => {
-	getImage(url)
+Vue.prototype.getImage = (path) => {
+	return getImage(path)
 }
 
 const app = new Vue({

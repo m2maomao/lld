@@ -43,7 +43,7 @@ export function locationConvert (province, city, district) {
 }
 
 // 图片处理
-export const getImage = (path, width, height) => {
+export const getImage = (path) => {
   if (path) {
     if (path.indexOf('http://') === 0 || path.indexOf('https://') === 0) {
       return path
