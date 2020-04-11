@@ -5,7 +5,7 @@
 			<view class="main-content">
 				<view class="top-info">
 					<view class="user-wrap">
-						<view class="name">早上好~,张天</view>
+						<view class="name">早上好~,张天天</view>
 						<view class="avatar">
 							<img src="https://dummyimage.com/50x50/94ffff">
 							<i class="icon boy"></i>
