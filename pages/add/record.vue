@@ -11,67 +11,146 @@
 				<view class="form-item">
 					<view class="form-item-label warn">拜访日期</view>
 					<view class="form-item-input">
-						<view class="form-item-witharrow">请选择时间</view>
-						<picker @change="bindPickerChange" :value="index" :range="array">
-							<view class="uni-input" v-if="">{{array[index]}}</view>
-							<view v-else>请选择时间</view>
+						<!-- <view class="form-item-witharrow">请选择时间</view> -->
+						<picker mode="date" :start="startDate" :end="endDate" @change="bindDateChange" style="width:100%" class="pickMode">
+							<view class="uni-input" v-if="visitTime.length>0">{{visitTime}}</view>
+							<view class="form-item-witharro" v-else>请选择时间</view>
 						</picker>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label warn">拜访人</view>
 					<view class="form-item-input">
-						<input placeholder="请输入拜访人姓名" />
+						<input placeholder="请输入拜访人姓名" v-model="customerName"/>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label warn">拜访地址</view>
 					<view class="form-item-input">
-						<input placeholder="请输入拜访地址" />
+						<input placeholder="请输入拜访地址" v-model="address" />
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label warn">拜访事项</view>
 					<view class="form-item-input">
-						<input placeholder="请输入拜访事项" />
-						<view class="form-item-limitcount">0/10</view>
+						<input placeholder="请输入拜访事项" v-model="matter" maxlength="10"/>
+						<view class="form-item-limitcount">{{matter.length}}/10</view>
 					</view>
 				</view>
 				<view class="form-item column">
 					<view class="form-item-label warn">拜访摘要</view>
 					<view class="form-item-textarea">
-						<textarea />
-						<view class="limitcount">0/100</view>
+						<textarea v-model="summary" maxlength="100" />
+						<view class="limitcount">{{summary.length}}/100</view>
 					</view>
 				</view>
 				<view class="form-item column">
 					<view class="form-item-label ">附件上传</view>
 					<view class="form-item-upload">
-						<view class="form-item-upload-btn"></view>
+						<view class="form-item-upload-btn" @click="upLoadFile"></view>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label">费用报销</view>
 					<view class="form-item-input">
-						<input placeholder="请输入费用报销" />
+						<input placeholder="请输入费用报销" v-model="expense"/>
 						<view class="unit">元</view>
 					</view>
 				</view>
 			</view>
-			<view class="form-button">保存</view>
+			<view class="form-button" @click="toSaveInfo">保存</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {addVisitRecord} from '../../api/api.js'
 	export default {
 		data() {
 			return {
-				
+				id: null,
+				address:'',
+				visitTime:'',//拜访日期
+				customerName:'',
+				matter:'',//拜访事项
+				summary:'',//拜访摘要
+				attachment:[
+					{
+					            "file": "11",
+					            "original": "12",
+					            "size": "111",
+					            "title": "22",
+					            "type": "111",
+					            "url": "11111"
+					        }
+				],
+				expense:'',//费用报销
 			};
 		},
 		onLoad(option) {
-			console.log(option)
+			this.id = option.id
+		},
+		computed: {
+		        startDate() {
+		            return this.getDate('start');
+		        },
+		        endDate() {
+		            return this.getDate('end');
+		        }
+		    },
+		methods:{
+			/**
+			 * 监听日期选择
+			 */
+			bindDateChange(e){
+				const that= this;
+				that.visitTime = e.target.value;
+			},
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+	
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
+				}
+				month = month > 9 ? month : '0' + month;;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
+			},
+			upLoadFile(){
+				const that= this;
+				uni.chooseImage({
+				    success: (chooseImageRes) => {
+				        const tempFilePaths = chooseImageRes.tempFilePaths;
+						console.log('tempFilePaths=',tempFilePaths)
+						that.attachment[0] = tempFilePaths[0];
+						
+				    }
+				});
+			},
+			toSaveInfo(){
+				var params = {
+					id:this.id,
+					address:this.address,
+					attachment:this.attachment,
+					customerName:this.customerName,
+					expense:this.expense,
+					matter:this.matter,
+					summary:this.summary,
+					visitTime:this.visitTime,
+				}
+				addVisitRecord(params).then((res)=>{
+					console.log('res=',res);
+					uni.showToast({
+						title:res.message
+					})
+					uni.navigateBack()
+				})
+			}
 		}
 	}
 </script>
@@ -192,6 +271,9 @@ page{
 				.form-item-witharrow{
 					color: #888888;
 					flex: 1;
+					// background: url(../../static/@2xjiantou.png) right center / 4px auto no-repeat;
+				}
+				.pickMode{
 					background: url(../../static/@2xjiantou.png) right center / 4px auto no-repeat;
 				}
 				.unit{

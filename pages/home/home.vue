@@ -5,7 +5,7 @@
 			<view class="main-content">
 				<view class="top-info">
 					<view class="user-wrap">
-						<view class="name">早上好~,张天天</view>
+						<view class="name">早上好~,张天</view>
 						<view class="avatar">
 							<img src="https://dummyimage.com/50x50/94ffff">
 							<i class="icon boy"></i>
@@ -81,22 +81,25 @@
 		onShow() {
 			// 未登录跳转
 			if( !isLogin() ) {
+				console.log('111')
 				uni.navigateTo({
-					url: "pages/login/index"
+					url: "../login/index"
+				})
+			}else{
+				home().then(res =>{
+					console.log('res=',res)
+					let _d = res.data
+					this.collectionNum = _d.collectionNum;
+					this.customerNum = _d.customerNum;
+					this.newCustomerNum = _d.newCustomerNum;
+					this.opportunities = _d.opportunities;
+					this.orderAmount = _d.orderAmount;
+					this.visitNum = _d.visitNum;
 				})
 			}
 		},
 		onLoad() {
-			home().then(res =>{
-				console.log('res=',res)
-				let _d = res.data
-				this.collectionNum = _d.collectionNum;
-				this.customerNum = _d.customerNum;
-				this.newCustomerNum = _d.newCustomerNum;
-				this.opportunities = _d.opportunities;
-				this.orderAmount = _d.orderAmount;
-				this.visitNum = _d.visitNum;
-			})
+			
 		}
 	}
 </script>
