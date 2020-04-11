@@ -1,9 +1,9 @@
 <template>
 	<view>
 		<view class="main-top">
-			<view class="title">佳格食品（中国）有限公司</view>
-			<view class="location">广东省·深圳市</view>
-			<view class="address">详细地址：太仓港经济技术开发区新区大连西路88号</view>
+			<view class="title">{{name}}</view>
+			<view class="location">{{position}}</view>
+			<view class="address" v-html="intro"></view>
 		</view>
 		<view class="main-content">
 			<view class="sign">加 <view class="warn">*</view> 标注的为必填项</view>
@@ -21,7 +21,7 @@
 				<view class="form-item">
 					<view class="form-item-label warn">拜访人</view>
 					<view class="form-item-input">
-						<input placeholder="请输入拜访人姓名" v-model="customerName"/>
+						<input placeholder="请输入拜访人姓名" v-model="customerName" />
 					</view>
 				</view>
 				<view class="form-item">
@@ -33,7 +33,7 @@
 				<view class="form-item">
 					<view class="form-item-label warn">拜访事项</view>
 					<view class="form-item-input">
-						<input placeholder="请输入拜访事项" v-model="matter" maxlength="10"/>
+						<input placeholder="请输入拜访事项" v-model="matter" maxlength="10" />
 						<view class="form-item-limitcount">{{matter.length}}/10</view>
 					</view>
 				</view>
@@ -76,19 +76,25 @@
 				summary:'',//拜访摘要
 				attachment:[
 					{
-					            "file": "11",
-					            "original": "12",
-					            "size": "111",
-					            "title": "22",
-					            "type": "111",
-					            "url": "11111"
-					        }
+						"file": "11",
+						"original": "12",
+						"size": "111",
+						"title": "22",
+						"type": "111",
+						"url": "11111"
+					}
 				],
 				expense:'',//费用报销
+				name:'',
+				position:'',
+				intro:''
 			};
 		},
 		onLoad(option) {
-			this.id = option.id
+			this.id = option.id;
+			this.name = decodeURIComponent(option.name);
+			this.position = decodeURIComponent(option.position);
+			this.intro = decodeURIComponent(option.intro);
 		},
 		computed: {
 		        startDate() {
@@ -148,7 +154,9 @@
 					uni.showToast({
 						title:res.message
 					})
-					uni.navigateBack()
+					setTimeout(() => {
+						uni.navigateBack()
+					},1000)
 				})
 			}
 		}

@@ -14,8 +14,8 @@
 		<view :class="['mask',maskFlag ? 'active' : '']"></view>
 		<view :class="['add_wrap',showPanel ? 'active' : '']">
 			<view class="navigator_wrap">
-				<view class="customer" @click="goto('../add/customer', {})">新增潜在客户</view>
-				<view class="record" @click="goto('../add/record', {})">新增拜访记录</view>
+				<view class="customer" @click="goUrl('../add/customer', {})">新增潜在客户</view>
+				<view class="record" @click="goUrl('../add/record', {})">新增拜访记录</view>
 			</view>
 			<view class="close_btn" @click="hidePanelHandle"></view>
 		</view>
@@ -99,6 +99,10 @@
 			showPanelHandle() {
 				this.showPanel = true
 				this.maskFlag = true
+			},
+			goUrl(path, option){
+				this.hidePanelHandle();
+				this.goto(path,option);
 			}
 		}
 	}

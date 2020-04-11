@@ -18,6 +18,7 @@ export default class Request {
 					// 拦截，并弹窗
 					if (res.data.code !== 'OK') {
 						uni.showToast({
+							icon:'none',
 							title: res.data.message
 						})
 						reject()
