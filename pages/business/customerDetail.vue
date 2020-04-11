@@ -40,9 +40,9 @@
 			</view>
 		</view>
 		
-		<view class="form-btn">
+		<view class="form-btn" @click="goto('../add/record', {id:id,name:name,position:locationConvert(province, city, district),intro:intro})">
 			<view class="icon-add"></view>
-			<view class="txt" @click="goto('../add/record', {id:id})">我来跟进</view>
+			<view class="txt">我来跟进</view>
 		</view>
 	</view>
 </template>

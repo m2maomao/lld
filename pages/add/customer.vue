@@ -6,26 +6,26 @@
 				<view class="form-item">
 					<view class="form-item-label">客户名称</view>
 					<view class="form-item-input">
-						<input placeholder="请输入客户名称" />
+						<input placeholder="请输入客户名称" v-model="name" />
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label">所在地区</view>
 					<view class="form-item-input">
-						<view class="form-item-witharrow">请选择所在地区</view>
+						<view class="form-item-witharrow" @tap="openAddres">{{pickerCity ? pickerCity.label:'请选择所在地区'}}</view>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label">详细地址</view>
 					<view class="form-item-input">
-						<input placeholder="如街道,门牌号等" />
+						<input placeholder="如街道,门牌号等" v-model="address" />
 					</view>
 				</view>
 				<view class="form-item column">
 					<view class="form-item-label">客户简介</view>
 					<view class="form-item-textarea">
-						<textarea />
-						<view class="limitcount">0/100</view>
+						<textarea v-model="intro" maxlength="100" />
+						<view class="limitcount">{{intro.length}}/100</view>
 					</view>
 				</view>
 			</view>
@@ -34,33 +34,82 @@
 				<view class="form-item">
 					<view class="form-item-label">联系人</view>
 					<view class="form-item-input">
-						<input placeholder="请输入联系人姓名" />
+						<input placeholder="请输入联系人姓名" v-model="contact"/>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label">部门职位</view>
 					<view class="form-item-input">
-						<input placeholder="请输入部门职位" />
+						<input placeholder="请输入部门职位"  v-model="position"/>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label">联系电话</view>
 					<view class="form-item-input">
-						<input placeholder="请输入联系电话" />
+						<input placeholder="请输入联系电话" v-model="mobile" type="number"/>
 					</view>
 				</view>
 			</view>
-			<view class="form-button">保存</view>
+			<view class="form-button" @click="toSaveInfo">保存</view>
+			<simple-address ref="simpleAddress" :pickerValueDefault="cityPickerValueDefault" @onConfirm="onConfirmAddress" themeColor="#007AFF"></simple-address>
 		</view>
 	</view>
 </template>
 
 <script>
+	import simpleAddress from '@/components/simple-address/simple-address.nvue';
+	import { addPotentialCustomer } from '../../api/api.js'
 	export default {
 		data() {
 			return {
-				
+				"address": "",
+				"city": "",
+				"contact": "",
+				"district": "",
+				"intro": "",
+				"mobile": "",
+				"name": "",
+				"position": "",
+				"province": "",
+			    pickerCity:"",
+				cityPickerValueDefault: [0, 0, 1],
 			};
+		},
+		components: {
+			simpleAddress
+		},
+		methods:{
+			toSaveInfo(){
+				let params = {
+					"address": this.address,
+					"city":this.pickerCity.labelArr[1],
+					"contact":this.contact,
+					"district":this.pickerCity.labelArr[2],
+					"intro":this.intro,
+					"mobile":this.mobile,
+					"name":this.name,
+					"position": this.position,
+					"province":this.pickerCity.labelArr[0],
+				}
+				addPotentialCustomer(params).then( res => {
+					uni.showToast({
+						title:res.message
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					},1000)
+					
+				})
+			},
+			openAddres() {
+				this.cityPickerValueDefault = [0,0,1]
+				this.$refs.simpleAddress.open();
+			},
+			onConfirmAddress(e){
+				
+				this.pickerCity = e;
+				console.log('pickerCity=',this.pickerCity)
+			}
 		}
 	}
 </script>
