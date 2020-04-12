@@ -1,64 +1,33 @@
 <template>
 	<view class="container">
 		<view class="main-top">
-			<view class="title">佳格食品（中国）有限公司</view>
+			<view class="title">{{name}}</view>
 			<view class="info-wrap">
-					<view class="location">广东省·深圳市</view>
-					<view class="time">2020-02-29</view>
+					<view class="location">{{locationConvert(province, city, district)}}</view>
 			</view>
-			<view class="introduction">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
+			<view class="introduction">{{intro}}</view>
 		</view>
 		
 		<view class="main-content">
 			<view class="contact-wrap">
 				<view class="contact-title">客户联系人</view>
-				<view class="info-single">联系人：王励勤</view>
-				<view class="info-single">部门职位：财务总监</view>
-				<view class="info-single">联系电话：17689870987</view>
+				<view class="info-single">联系人：{{contact}}</view>
+				<view class="info-single">部门职位：{{position}}</view>
+				<view class="info-single">联系电话：{{mobile}}</view>
 			</view>
 			<view class="record-wrap">
 				<view class="record-title">拜访记录</view>
-				
-				<view class="record-box">
-					<view class="user-wrap">
-						<view class="user-info">
-							<image class="img" src="https://dummyimage.com/16x16/595fff/fff"></image>
-							<view class="name">刘明杰</view>
-						</view>
-						<view class="phone">2020-02-29 于电话</view>
-					</view>
-					<view class="info-wrap">
-						<view class="info-title">商讨合作</view>
-						<view class="info-single">摘要：客户公司告知，已经选择了其他供应商</view>
-						<view class="info-single">费用：200元</view>
-						<view class="info-single">附件：</view>
-						<view class="info-img">
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-						</view>
-					</view>
+				<view class="empty" v-if="!visitList.length > 0">
+					<view class="txt">暂无记录</view>
 				</view>
-				
-				<view class="record-box">
-					<view class="user-wrap">
-						<view class="user-info">
-							<image class="img" src="https://dummyimage.com/16x16/595fff/fff"></image>
-							<view class="name">刘明杰</view>
-						</view>
-						<view class="phone">2020-02-29 于电话</view>
-					</view>
-					<view class="info-wrap">
-						<view class="info-title">商讨合作</view>
-						<view class="info-single">摘要：客户公司告知，已经选择了其他供应商</view>
-						<view class="info-single">费用：200元</view>
-						<view class="info-single">附件：</view>
-						<view class="info-img">
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
+				<view class="record-wrap-inner" v-for="(record, r) in visitList" :key="r" v-else>
+					<view class="record-box">
+						<view class="user-wrap">
+							<view class="user-info">
+								<image class="img" :src="getImage(record.avatar)"></image>
+								<view class="name">{{record.userName}}</view>
+							</view>
+							<view class="phone">{{formatTime(record.visitTime)}} 于电话</view>
 						</view>
 					</view>
 				</view>
@@ -74,11 +43,40 @@
 </template>
 
 <script>
+	import { potentialCustomerDetail } from '../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-
+				id: null,
+				city: null,
+				contact: null,
+				district: null,
+				intro: null,
+				mobile: null,
+				name: null,
+				position: null,
+				province: null,
+				visitList: []
 			};
+		},
+		onLoad(option) {
+			this.id = option.id;
+		},
+		onShow() {
+			potentialCustomerDetail({id: this.id}).then(res => {
+				console.log('潜在客户详情：', res)
+				let _d = res.data;
+				this.city = _d.city;
+				this.contact = _d.contact;
+				this.district = _d.district;
+				this.intro = _d.intro;
+				this.mobile = _d.mobile;
+				this.name = _d.name;
+				this.position = _d.position;
+				this.province = _d.province;
+				// this.visitList = _d.visitList
+			})
 		}
 	}
 </script>
@@ -138,6 +136,22 @@ page{
 			}
 		}
 		.record-wrap{
+			.empty {
+				width: 176px;
+				height: 95px;
+				margin: 80px auto 80px;
+				text-align: center;
+				position: relative;
+				background: url(../../static/@2xempty1.png) 0 0 / 176px auto no-repeat;
+				position: relative;
+			
+				.txt {
+					position: relative;
+					top: 90px;
+					font-size: 14px;
+					color: #333333;
+				}
+			}
 			.record-title{
 				font-size: 16px;
 			}

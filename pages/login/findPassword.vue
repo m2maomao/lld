@@ -27,6 +27,7 @@
 			return {
 				verifyCode: '',
 				mobile: '',
+				key: '',
 				count: '',
 				verifycodeBtnFlag: true,
 				timer: null
@@ -61,17 +62,12 @@
 			},
 			// 校验验证码
 			next() {
-				// resetPwdStep1({
-				// 	mobile: this.mobile,
-				// 	verifyCode: this.verifyCode
-				// }).then(res => {
-				// 	uni.navigateTo({
-				// 		url:"./resetPassword"
-				// 	})
-				// })
-				let data = JSON.stringify({'key': '11ss22ss33eejjkk', 'mobile': this.mobile})
-				uni.navigateTo({
-					url:"./resetPassword?data=" + data
+				resetPwdStep1({
+					mobile: this.mobile,
+					verifyCode: this.verifyCode
+				}).then(res => {
+					this.key = res.key
+					this.goto('./resetPassword', {mobile: this.mobile, verifyCode: this.verifyCode, key: this.key})
 				})
 			}
 		}

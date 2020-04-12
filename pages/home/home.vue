@@ -81,13 +81,11 @@
 		onShow() {
 			// 未登录跳转
 			if( !isLogin() ) {
-				console.log('111')
 				uni.navigateTo({
 					url: "../login/index"
 				})
 			}else{
 				home().then(res =>{
-					console.log('res=',res)
 					let _d = res.data
 					this.collectionNum = _d.collectionNum;
 					this.customerNum = _d.customerNum;

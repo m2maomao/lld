@@ -1,5 +1,6 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		
 		{
 			"path": "pages/home/home",
 			"style": {
@@ -16,6 +17,22 @@
 				"navigationBarBackgroundColor": "#002140",
 				"navigationBarTitleText": " ",
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/login/resetPassword",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/login/findPassword",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "忘记密码"
 			}
 		},
 		{
@@ -162,22 +179,6 @@
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "新增潜在客户"
-			}
-		},
-		{
-			"path": "pages/login/resetPassword",
-			"style": {
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "修改密码"
-			}
-		},
-		{
-			"path": "pages/login/findPassword",
-			"style": {
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "忘记密码"
 			}
 		},
 		{

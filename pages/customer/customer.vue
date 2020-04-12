@@ -28,38 +28,20 @@
 						class="content"
 						v-show="tabSelected === 0"
 					>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">佳格食品（中国）有限公司</view>
-							<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
+						<view 
+							class="sub_content_wrap"
+							v-for="(item, index) in cooperationCustomerData.list"
+							:key="index"
+							@click="goto('./cooperativeDetail', {id: item.id})"
+						>
+							<view class="sub_title">{{item.name}}</view>
+							<view class="sub_content" v-html="item.intro"></view>
 							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近下单：2020-02-29</view>
+								<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+								<view class="time">最近下单：{{formatTime(item.updateTime)}}</view>
 							</view>
-						</navigator>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">上海东冠纸业有限公司</view>
-							<view class="sub_content">上海东冠纸业有限公司 [1]  是由英属维尔京群岛的东方纸业有限公司和上海东冠华洁纸业有限公司共同投资设立的专业生产各类高档卫生用纸企业，其产品的品牌是“洁云”。</view>
-							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近下单：2020-02-29</view>
-							</view>
-						</navigator>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">佳格食品（中国）有限公司</view>
-							<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近下单：2020-02-29</view>
-							</view>
-						</navigator>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">上海东冠纸业有限公司</view>
-							<view class="sub_content">上海东冠纸业有限公司 [1]  是由英属维尔京群岛的东方纸业有限公司和上海东冠华洁纸业有限公司共同投资设立的专业生产各类高档卫生用纸企业，其产品的品牌是“洁云”。</view>
-							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近下单：2020-02-29</view>
-							</view>
-						</navigator>
+						</view>
+						
 					</scroll-view>
 					<scroll-view
 						:scroll-y="innerScroll"
@@ -69,38 +51,19 @@
 						class="content"
 						v-show="tabSelected === 1"
 					>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">佳格食品（中国）有限公司</view>
-							<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
+						<view
+							class="sub_content_wrap"
+							v-for="(item, index) in potentialCustomerData.list"
+							:key="index"
+							@click="goto('./potentialDetail', {id: item.id})"
+						>
+							<view class="sub_title">{{item.name}}</view>
+							<view class="sub_content">{{item.intro}}</view>
 							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近跟进：2020-02-29</view>
+								<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+								<view class="time">最近跟进：{{formatTime(item.createTime)}}</view>
 							</view>
-						</navigator>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">上海东冠纸业有限公司</view>
-							<view class="sub_content">上海东冠纸业有限公司 [1]  是由英属维尔京群岛的东方纸业有限公司和上海东冠华洁纸业有限公司共同投资设立的专业生产各类高档卫生用纸企业，其产品的品牌是“洁云”。</view>
-							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近跟进：2020-02-29</view>
-							</view>
-						</navigator>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">佳格食品（中国）有限公司</view>
-							<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近跟进：2020-02-29</view>
-							</view>
-						</navigator>
-						<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-							<view class="sub_title">上海东冠纸业有限公司</view>
-							<view class="sub_content">上海东冠纸业有限公司 [1]  是由英属维尔京群岛的东方纸业有限公司和上海东冠华洁纸业有限公司共同投资设立的专业生产各类高档卫生用纸企业，其产品的品牌是“洁云”。</view>
-							<view class="sub_info">
-								<view class="area">广东省·深圳市</view>
-								<view class="time">最近跟进：2020-02-29</view>
-							</view>
-						</navigator>
+						</view>
 					</scroll-view>
 				</view>
 			</scroll-view>	
@@ -111,6 +74,8 @@
 
 <script>
 	import tabBar from '../../components/tabbar';
+	import { cooperationCustomerList, potentialCustomerList } from '../../api/api.js';
+	
 	export default {
 		components:{
 			tabBar
@@ -123,7 +88,11 @@
 				innerScroll: false,
 				// tab
 				tabMenu: ['合作客户', '潜在客户'],
-				tabSelected: 0
+				tabSelected: 0,
+				// 合作客户列表
+				cooperationCustomerData: {},//
+				// 潜在客户列表
+				potentialCustomerData: {}
 			};
 		},
 		methods:{
@@ -146,6 +115,18 @@
 			tabHandle(index) {
 				this.tabSelected = index
 			}
+		},
+		onShow() {
+			// 获取合作客户
+			cooperationCustomerList().then(res => {
+				this.cooperationCustomerData = res.data
+				console.log('cooperationCustomerData:', this.cooperationCustomerData)
+			}),
+			// 获取潜在客户
+			potentialCustomerList().then(res => {
+				this.potentialCustomerData = res.data
+				console.log('potentialCustomerData:', this.potentialCustomerData)
+			})
 		}
 	}
 </script>

@@ -29,10 +29,9 @@
 				password: ''
 			};
 		},
-		onLoad(options) {
-			let data = JSON.parse(options.data)
-			this.mobile = data.mobile
-			this.key = data.key
+		onLoad(option) {
+			this.mobile = option.mobile
+			this.key = option.key
 		},
 		methods:{
 			submit() {
@@ -45,6 +44,9 @@
 					uni.showToast({
 						title: res.message
 					})
+					setTimeout(() => {
+						this.goto('./index', {})
+					}, 1000)
 				})
 			}
 		}

@@ -38,7 +38,7 @@ export function locationConvert (province, city, district) {
 	if(province === city) {
 		return `${city}·${district}`
 	} else {
-		return `${province}.${city}`
+		return `${province}·${city}`
 	}
 }
 

@@ -2,7 +2,7 @@
 	<view>
 		<view class="main-top">
 			<view class="title">{{name}}</view>
-			<view class="location">{{position}}</view>
+			<view class="location">{{location}}</view>
 			<view class="address" v-html="intro"></view>
 		</view>
 		<view class="main-content">
@@ -86,24 +86,24 @@
 				],
 				expense:'',//费用报销
 				name:'',
-				position:'',
+				location:'',
 				intro:''
 			};
 		},
 		onLoad(option) {
 			this.id = option.id;
 			this.name = decodeURIComponent(option.name);
-			this.position = decodeURIComponent(option.position);
+			this.location = decodeURIComponent(option.location);
 			this.intro = decodeURIComponent(option.intro);
 		},
 		computed: {
-		        startDate() {
-		            return this.getDate('start');
-		        },
-		        endDate() {
-		            return this.getDate('end');
-		        }
-		    },
+			startDate() {
+				return this.getDate('start');
+			},
+			endDate() {
+				return this.getDate('end');
+			}
+		},
 		methods:{
 			/**
 			 * 监听日期选择
