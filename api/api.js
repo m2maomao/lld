@@ -23,7 +23,7 @@ export const userSendVerifycode = (data) => {
 
 // 首页
 export const home = (params) => {
-	return request('/api/home', {params}, 'GET')
+	return request('/api/home', {...params}, 'GET')
 }
 
 // 企业招标分页列表
@@ -53,7 +53,7 @@ export const visitList = (params) => {
 
 // 合作客户列表
 export const cooperationCustomerList = (params) => {
-	return request('/api/customer/cooperation/list', {params}, 'GET')
+	return request('/api/customer/cooperation/list', {...params}, 'GET')
 }
 
 // 新增潜在客户
@@ -88,12 +88,17 @@ export const accountChangePhone = (data) => {
 
 // 我的合作客户列表
 export const accountCooperation = (params) => {
-	return request('/api/account/cooperation', {params}, 'GET')
+	return request('/api/account/cooperation', {...params}, 'GET')
+}
+
+// 添加商机
+export const accountCreate = (params) => {
+	return request('/api/account/create/' + params.id,{...params}, 'POST')
 }
 
 // 获取用户资料
 export const accountInfo = (params) => {
-	return request('/api/account/info', {params}, 'GET')
+	return request('/api/account/info', {...params}, 'GET')
 }
 
 // 修改手机号
@@ -108,7 +113,13 @@ export const accountOpportunity = (params) => {
 
 // 我的潜在客户列表
 export const accountPotential = (params) => {
-	return request('/api/account/potential', {params}, 'GET')
+	return request('/api/account/potential', {...params}, 'GET')
+}
+
+// 修改头像
+
+export const accountUpdateAvatar = (data) => {
+	return request('/api/account/update/avatar', {...data}, 'POST')
 }
 
 // 修改性别

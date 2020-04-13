@@ -10,8 +10,8 @@
 				@scroll="scrollHandle"
 			>
 				<view class="searchBox">
-					<input class="uni-input" placeholder="搜索..." />
-					<i class="icon-search"></i>
+					<input class="uni-input" placeholder="搜索..."  v-model="searchWord"/>
+					<i class="icon-search" @click="goto('../search/index', {searchWord: searchWord, tabMenuSelected: tabMenu[tabSelected]})"></i>
 				</view>
 				<view class="list_with_detail">
 					<view class="menu">
@@ -82,6 +82,7 @@
 		},
 		data() {
 			return {
+				searchWord: null,
 				// 动态改变搜索框状态
 				searchToolFlag: false,
 				// 内部滚动

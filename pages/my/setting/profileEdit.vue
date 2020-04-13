@@ -4,7 +4,7 @@
 			<view class="list-wrap">
 				<view class="navigator">
 					<view type="default">头像</view>
-					<view class="content">
+					<view class="content" @click="upLoadFile">
 						<image :src="getImage(accountInfo.avatar)" class="img"></image>
 					</view>
 				</view>
@@ -27,12 +27,14 @@
 
 <script>
 	import { accountUpdateGender } from '../../../api/api.js';
-	import { mapState } from 'vuex';
+	import {API_ROOT} from '@/api/config.js';
+	
+	import { mapState, mapMutations } from 'vuex';
 
 	export default {
 		data() {
 			return {
-				genderArray: ['男', '女'],
+				genderArray: ['女', '男'],
 				genderIndex: null,
 			};
 		},
@@ -40,12 +42,36 @@
 			...mapState(['accountInfo'])
 		},
 		methods: {
+			...mapMutations(['setAvatar']),
 			bindPickerChange: function(e) {
 				console.log('picker发送选择改变，携带值为', e.target.value)
 				this.genderIndex = e.target.value
 				accountUpdateGender({gender: this.genderIndex}).then(res => {
 					console.log(res)
 				})
+			},
+			upLoadFile(){
+				uni.chooseImage({
+					success: (chooseImageRes) => {
+						const tempFilePaths = chooseImageRes.tempFilePaths;
+						uni.uploadFile({
+							url: API_ROOT + '/api/ueditor?action=uploadfile',
+							filePath: tempFilePaths[0],
+							header: {
+								'Authorization': 'Bearer ' + uni.getStorageSync('token')
+							},
+							name: 'upfile',
+							success: (uploadFileRes) => {
+								console.log('uploadFileRes.data', uploadFileRes.data);
+								let _d = JSON.parse(uploadFileRes.data);
+								this.setAvatar({avatar: _d.avatar})
+							},
+							fail: (res) => {
+								console.log(res)
+							}
+						});
+					}
+				});
 			}
 		},
 		onReady() {

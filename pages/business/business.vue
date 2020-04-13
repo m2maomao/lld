@@ -10,8 +10,8 @@
 				@scroll="scrollHandle"
 			>
 				<view class="searchBox">
-					<input class="uni-input" placeholder="搜索..." />
-					<i class="icon-search"></i>
+					<input class="uni-input" placeholder="搜索..." v-model="searchWord" />
+					<i class="icon-search" @click="goto('../search/index', {searchWord: searchWord, tabMenuSelected: tabMenu[tabSelected]})"></i>
 				</view>
 				<view class="list_with_detail">
 					<view class="menu">
@@ -91,6 +91,8 @@
 				// tab
 				tabMenu: ['企业招标', '公海客户'],
 				tabSelected: 0,
+				// 搜索
+				searchWord: null,
 				// 企业招标传参
 				enterpriseParams: {
 					asc: null,

@@ -2,126 +2,172 @@
 	<view>
 		<view class="container">
 			<view class="searchBox">
-				<input class="uni-input" placeholder="搜索..." />
+				<input class="uni-input" placeholder="搜索..." v-model="searchWord" />
 				<i class="icon-search"></i>
 			</view>
 			<view class="content">
 				
 				<!-- 暂无结果 -->
-				<view class="empty">
+				<view class="empty" v-show="emptyFlag">
 					<view class="txt">暂无结果</view>
 				</view>
 				<!-- /暂无结果 -->
 				
 				<!-- 企业招标 -->
-				<!-- <view class="tendering">
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
+				<view class="tendering" v-if="tabMenuSelected === '企业招标'">
+					<view
+						class="sub_content_wrap"
+						v-for="(item, index) in enterpriseList"
+						:key="index"
+						@click="goto('../business/tenderingDetail', {id: item.id})"
+					>
+						<view class="sub_title">{{item.title}}</view>
 						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
+							<view class="area">
+								{{locationConvert(item.province, item.city, item.district)}}
+							</view>
+							<view class="time">最近下单：{{formatTime(item.createTime)}}</view>
 						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">发布时间：2020-02-29</view>
-						</view>
-					</navigator>
-				</view> -->
+					</view>
+				</view>
 				<!-- /企业招标 -->
 				
 				<!-- 公海客户 -->
-				<!-- <view class="customer">
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
+				<view class="customer" v-if="tabMenuSelected === '公海客户' && !emptyFlag">
+					<view
+						class="sub_content_wrap"
+						v-for="(item, index) in customerList"
+						:key="index"
+						@click="goto('../business/customerDetail', {id: item.id})"
+					>
+						<view class="sub_title">{{item.name}}</view>
+						<view class="sub_content">{{item.intro}}</view>
 						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">最近跟进：2020-02-29</view>
+							<view class="area">
+								{{locationConvert(item.province, item.city, item.district)}}
+							</view>
+							<view class="time">最近跟进：{{formatTime(item.updateTime)}}</view>
 						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">最近跟进：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">最近跟进：2020-02-29</view>
-						</view>
-					</navigator>
-					<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-						<view class="sub_title">佳格食品（中国）有限公司</view>
-						<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-						<view class="sub_info">
-							<view class="area">广东省·深圳市</view>
-							<view class="time">最近跟进：2020-02-29</view>
-						</view>
-					</navigator>
-				</view> -->
+					</view>
+				</view>
 				<!-- /公海客户 -->
 				
+				<!-- 合作客户 -->
+				<view class="cooperative" v-if="tabMenuSelected === '合作客户' && !emptyFlag">
+					<view
+						class="sub_content_wrap"
+						v-for="(item, index) in cooperationCustomerData.list"
+						:key="index"
+						@click="goto('../customer/cooperativeDetail', {id: item.id})"
+					>
+						<view class="sub_title">{{item.name}}</view>
+						<view class="sub_content" v-html="item.intro"></view>
+						<view class="sub_info">
+							<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+							<view class="time">最近下单：{{formatTime(item.updateTime)}}</view>
+						</view>
+					</view>
+				</view>
+				<!-- /合作客户 -->
+				
+				<!-- 潜在客户 -->
+				<view class="potential" v-if="tabMenuSelected === '潜在客户' && !emptyFlag">
+					<view
+						class="sub_content_wrap"
+						v-for="(item, index) in potentialCustomerData.list"
+						:key="index"
+						@click="goto('../customer/potentialDetail', {id: item.id})"
+					>
+						<view class="sub_title">{{item.name}}</view>
+						<view class="sub_content">{{item.intro}}</view>
+						<view class="sub_info">
+							<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+							<view class="time">最近跟进：{{formatTime(item.createTime)}}</view>
+						</view>
+					</view>
+				</view>
+				<!-- /潜在客户 -->
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { opportunityEnterpriseList, opportunityCustomerList, cooperationCustomerList, potentialCustomerList} from '../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				searchWord: null,
+				tabMenuSelected: null,
+				emptyFlag: true,
+				// 企业招标列表数据
+				enterpriseList: [],
+				// 公海客户列表数据
+				customerList: [],
+				// 合作客户列表
+				cooperationCustomerData: {},//
+				// 潜在客户列表
+				potentialCustomerData: {}
 			};
+		},
+		onLoad(option) {
+			console.log('option:', option)
+			this.searchWord = decodeURIComponent(option.searchWord)
+			this.tabMenuSelected = decodeURIComponent(option.tabMenuSelected)
+			console.log('this.searchWord', this.searchWord)
+			console.log('this.tabMenuSelected', this.tabMenuSelected)
+		},
+		methods:{
+			fetchData() {
+				switch(this.tabMenuSelected) {
+					case '企业招标':
+						// 获取企业招标列表
+						opportunityEnterpriseList(this.enterpriseParams).then(res => {
+							console.log('招标res:', res)
+							let _d = res.data
+							this.enterpriseList = _d.list
+							this.changeEmptyFlag(this.enterpriseList)
+						});
+						break;
+					case '公海客户':
+						// 获取公海客户列表
+						opportunityCustomerList(this.customerParams).then(res => {
+							console.log('客户res:', res)
+							let _d = res.data
+							this.customerList = _d.list
+							this.changeEmptyFlag(this.customerList)
+						});
+						break;
+					case '合作客户':
+						// 获取合作客户
+						cooperationCustomerList().then(res => {
+							this.cooperationCustomerData = res.data
+							this.changeEmptyFlag(this.cooperationCustomerData.list)
+							console.log('cooperationCustomerData:', this.cooperationCustomerData)
+						});
+						break;
+						case '潜在客户':
+							// 获取潜在客户
+							potentialCustomerList().then(res => {
+								this.potentialCustomerData = res.data
+								this.changeEmptyFlag(this.potentialCustomerData.list)
+								console.log('potentialCustomerData:', this.potentialCustomerData)
+							});
+							break;
+						default:
+							this.emptyFlag = true
+				}
+			},
+			changeEmptyFlag(o) {
+				this.emptyFlag = o.length > 0 ? false : true
+			}
+		},
+		mounted() {
+			this.fetchData()
+		},
+		onBackPress() {
+			this.searchWord = ''
 		}
 	}
 </script>
@@ -220,6 +266,49 @@ page{
 		.customer{
 			.sub_content_wrap{
 				padding-top: 15px;
+				&:after{
+					content: " ";
+					position: absolute;
+					height: 1px;
+					width: 89%;
+					border-top: 1px solid rgba($color: #cbcbcb, $alpha: .4);
+					transform-origin: 0 0;
+					transform: scaleY(0.5);/*缩放*/
+				}
+				&:last-child{
+					&:after{
+						border-top: none;
+					}
+				}
+				.sub_title{
+					font-size: 14px;
+					line-height: 20px;
+					color: #000000;
+				}
+				.sub_content{
+					font-size: 14px;
+					color: #666666;
+					margin-top: 10px;
+					line-height: 20px;
+				}
+				.sub_info{
+					margin-top: 10px;
+					font-size: 12px;
+					color: #999999;
+					display: flex;
+					justify-content: space-between;
+					margin-bottom: 15px;
+					.area{
+						background: url(../../static/@2xlocation.png) 0 center / auto 12px no-repeat;
+						padding-left: 16px;
+					}
+					.time{}
+				}
+			}
+		}
+		.cooperative, .potential{
+			.sub_content_wrap{
+				padding: 15px 20px 0 20px;
 				&:after{
 					content: " ";
 					position: absolute;

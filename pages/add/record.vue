@@ -47,13 +47,16 @@
 				<view class="form-item column">
 					<view class="form-item-label ">附件上传</view>
 					<view class="form-item-upload">
+						<view class="attachment-wrap" v-if="attachment.length" v-for="(img, i) in attachment" :key="i">
+							<view class="img"><image :src="getImage(img.url)" /></view>
+						</view>
 						<view class="form-item-upload-btn" @click="upLoadFile"></view>
 					</view>
 				</view>
 				<view class="form-item">
 					<view class="form-item-label">费用报销</view>
 					<view class="form-item-input">
-						<input placeholder="请输入费用报销" v-model="expense"/>
+						<input type="digit" placeholder="请输入费用报销" v-model="expense"/>
 						<view class="unit">元</view>
 					</view>
 				</view>
@@ -64,7 +67,9 @@
 </template>
 
 <script>
-	import {addVisitRecord} from '../../api/api.js'
+	import {addVisitRecord} from '../../api/api.js';
+	import {API_ROOT} from '@/api/config.js';
+	
 	export default {
 		data() {
 			return {
@@ -74,16 +79,7 @@
 				customerName:'',
 				matter:'',//拜访事项
 				summary:'',//拜访摘要
-				attachment:[
-					{
-						"file": null,
-						"original": null,
-						"size": null,
-						"title": null,
-						"type": null,
-						"url": null
-					}
-				],
+				attachment:[],
 				expense:'',//费用报销
 				name:'',
 				location:'',
@@ -129,21 +125,32 @@
 			},
 			upLoadFile(){
 				uni.chooseImage({
-				    success: (chooseImageRes) => {
-				        const tempFilePaths = chooseImageRes.tempFilePaths;
-				        uni.uploadFile({
-				            url: 'http://ip-30-fengqifeng-seller-app.coralcodes.com/api/customer/visit', //仅为示例，非真实的接口地址
-				            filePath: tempFilePaths[0],
-										header: {'Content-Type':'application/json;charset=UTF-8','Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudCIsImNyZWF0ZWQiOjE1ODY1ODg4MzE5NzYsImV4cCI6MTU4NzE5MzYzMX0.CngxCvDZyYqWuxt0qcJtSCTNUS3KUGNJhq6_magr7cjGqASBx7MkKFa0pSnFzHxyrsDT5bzgniZNVGS0YREtSg'},
-				            name: 'file',
-				            formData: {
-				                'user': 'test'
-				            },
-				            success: (uploadFileRes) => {
-				                console.log(uploadFileRes.data);
-				            }
-				        });
-				    }
+					success: (chooseImageRes) => {
+						const tempFilePaths = chooseImageRes.tempFilePaths;
+						uni.uploadFile({
+							url: API_ROOT + '/api/ueditor?action=uploadfile',
+							filePath: tempFilePaths[0],
+							header: {
+								'Authorization': 'Bearer ' + uni.getStorageSync('token')
+							},
+							name: 'upfile',
+							success: (uploadFileRes) => {
+								console.log('uploadFileRes.data', uploadFileRes.data);
+								let _d = JSON.parse(uploadFileRes.data);
+								this.attachment.push({
+									original: _d.original,
+									size: _d.size,
+									title: _d.title,
+									type: _d.type,
+									url: _d.url
+								})
+								console.log('attachment:', this.attachment)
+							},
+							fail: (res) => {
+								console.log(res)
+							}
+						});
+					}
 				});
 			},
 			toSaveInfo(){
@@ -299,6 +306,19 @@ page{
 			}
 			.form-item-upload{
 				width: 100%;
+				display: flex;
+				flex-wrap: wrap;
+				.attachment-wrap{
+					.img{
+						width: 64px;
+						height: 64px;
+						margin:0 10px 10px 0;
+						image{
+							width: 64px;
+							height: 64px;
+						}
+					}
+				}
 				.form-item-upload-btn{
 					width: 64px;
 					height: 64px;

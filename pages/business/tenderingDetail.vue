@@ -8,8 +8,10 @@
 					<view class="time">{{formatTime(createTime)}}</view>
 				</view>
 				<view class="info-right">
-					<navigator class="icon-share"></navigator>
-					<navigator class="icon-favorite"></navigator>
+					<view class="icon-share">
+						<button open-type="share"></button>
+					</view>
+					<view class="icon-favorite" @click="addFavorite"></view>
 				</view>
 			</view>
 		</view>
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-	import { opportunityEnterprise } from '../../api/api.js'
+	import { opportunityEnterprise, accountCreate } from '../../api/api.js'
 	
 	export default {
 		data() {
@@ -52,6 +54,17 @@
 				this.district =_d.district
 				this.title = _d.title
 			})			
+		},
+		methods:{
+			addFavorite() {
+				accountCreate({
+					id: this.id
+				}).then(res => {
+					uni.showToast({
+						title: res.message
+					})
+				})
+			}
 		}
 	}
 </script>
@@ -96,6 +109,15 @@ page{
 					width: 16px;
 					height: 16px;
 					background: url(../../static/@2xshare.png) 0 center / 16px auto no-repeat;
+					button{
+						background: none;
+						border: 0;
+						&:after{border: none;}
+						padding: 0;
+						outline: none;
+						width: 100%;
+						height: 100%;
+					}
 				}
 				.icon-favorite{
 					margin-left: 25px;

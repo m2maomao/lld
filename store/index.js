@@ -26,6 +26,9 @@ const store = new Vuex.Store({
 				key: 'accountInfo',
 				data: state.accountInfo
 			})
+		},
+		setAvatar(state, provider) {
+			state.accountInfo.avatar = provider.avatar
 		}
 	},
 	action: {}

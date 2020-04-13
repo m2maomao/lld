@@ -8,8 +8,8 @@
 						<view class="name">早上好~,{{accountInfo.name}}</view>
 						<view class="avatar">
 							<img :src="getImage(accountInfo.avatar)">
-							<i v-show="accountInfo.gender.value === 1" class="icon boy"></i>
-							<i v-show="accountInfo.gender.value === 0" class="icon girl"></i>
+							<i v-if="parseInt(accountInfo.gender.value) === 1" class="icon boy"></i>
+							<i v-if="parseInt(accountInfo.gender.value) === 0" class="icon girl"></i>
 						</view>
 					</view>
 					<view class="total-info-wrap">

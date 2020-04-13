@@ -79,6 +79,10 @@
 				tabSelected: 0,
 				// 客户ID
 				id: null,
+				params: {
+					pageIndex: 1,
+					pageSize: 10
+				},
 				// 拜访记录  
 				name: null,
 				province: null,
@@ -102,9 +106,9 @@
 		onShow() {
 			// 获取拜访记录
 			customerVisitRecording({
-				id: this.id
+				id: this.id,
+				...this.params
 			}).then(res => {
-				console.log('res:::', res)
 				let _d = res.data
 				this.name = _d.name;
 				this.province = _d.province;
