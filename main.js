@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import App from './App'
+// 引入vuex
+import store from './store'
+// 把vuex定义成全局组件
+Vue.prototype.$store = store
+
 import { formatDate, goto, locationConvert, getImage } from './libs/tools.js'
 
 Vue.config.productionTip = false
@@ -27,6 +32,7 @@ Vue.prototype.getImage = (path) => {
 }
 
 const app = new Vue({
-    ...App
+    ...App,
+		store
 })
 app.$mount()

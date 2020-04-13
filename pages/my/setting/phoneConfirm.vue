@@ -4,14 +4,15 @@
 			<view class="form-item border-bottom">
 				<view class="form-item-label">新号码</view>
 				<view class="form-item-input">
-					<input placeholder="请输入新手机号码" />
+					<input placeholder="请输入新手机号码" v-model="mobile" />
 				</view>
 			</view>
 			<view class="form-item">
 				<view class="form-item-label">验证码</view>
 				<view class="form-item-input">
-					<input placeholder="请输入验证码" />
-					<view class="capture">获取验证码</view>
+					<input placeholder="请输入验证码" v-model="verifyCode" />
+					<view v-show="verifycodeBtnFlag" class="capture" @click="getVerifycode">获取验证码</view>
+					<view v-show="!verifycodeBtnFlag" class="count">{{count}}s</view>
 				</view>
 			</view>
 			<view class="form-button">确定</view>
@@ -20,11 +21,59 @@
 </template>
 
 <script>
+	import { userSendVerifycode, accountChangePhone} from '../../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				mobile: null,
+				verifyCode: '',
+				key: '',
+				count: '',
+				verifycodeBtnFlag: true,
+				timer: null
 			};
+		},
+		methods:{
+			// 获取验证码
+			getVerifycode() {
+				const TIME_OUT = 60
+				userSendVerifycode({
+					mobile: this.mobile
+				}).then(res => {
+					// 提示
+					uni.showToast({
+						title: res.message
+					})
+					// 显示倒计时
+					if(!this.timer) {
+						this.count = TIME_OUT
+						this.verifycodeBtnFlag = false
+						this.timer=setInterval(() => {
+							if(this.count > 0 && this.count <= TIME_OUT) {
+								this.count--
+							} else {
+								this.verifycodeBtnFlag = true
+								clearInterval(this.timer)
+								this.timer = null
+							}
+						}, 1000)
+					}
+				})
+			},
+			changePhone() {
+				accountChangePhone({
+					mobile: this.mobile,
+					smsCode: this.verifyCode
+				}).then(res => {
+					uni.showToast({
+						title:res.message
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					})
+				})
+			}
 		}
 	}
 </script>

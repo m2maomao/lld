@@ -1,40 +1,33 @@
 <template>
 	<view>
 		<view class="main-wrap">
-			<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-				<view class="sub_title">佳格食品（中国）有限公司</view>
-				<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
+			<view class="sub_content_wrap" v-for="(item, index) in list" :key="index">
+				<view class="sub_title">{{item.name}}</view>
+				<view class="sub_content">{{item.intro}}</view>
 				<view class="sub_info">
-					<view class="area">广东省·深圳市</view>
-					<view class="time">最近跟进：2020-02-29</view>
+					<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+					<view class="time">最近跟进：{{formatTime(item.updateTime)}}</view>
 				</view>
-			</navigator>
-			<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-				<view class="sub_title">佳格食品（中国）有限公司</view>
-				<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-				<view class="sub_info">
-					<view class="area">广东省·深圳市</view>
-					<view class="time">最近跟进：2020-02-29</view>
-				</view>
-			</navigator>
-			<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-				<view class="sub_title">佳格食品（中国）有限公司</view>
-				<view class="sub_content">佳格食品（中国）有限公司于2012年01月21日在太仓市市场监督管理局登记成立。法定代表人宣建生，公司经营范围包括食用植物油（全精炼、半精炼）、饮料（植物饮料、营养素饮料、蛋白饮料）等</view>
-				<view class="sub_info">
-					<view class="area">广东省·深圳市</view>
-					<view class="time">最近跟进：2020-02-29</view>
-				</view>
-			</navigator>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { accountPotential } from '../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				list: []
 			};
+		},
+		onShow() {
+			accountPotential().then(res => {
+				console.log(res)
+				let _d = res.data;
+				this.list = _d.list
+			})
 		}
 	}
 </script>

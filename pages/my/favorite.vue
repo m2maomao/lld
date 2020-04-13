@@ -1,49 +1,40 @@
 <template>
 	<view>
 		<view class="main-wrap">
-			<view class="empty">
+			<view class="empty" v-if="!list.length>0">
 				<view class="txt">暂无收藏</view>
 			</view>
-			<view class="content-wrap">
-				<!-- <navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-					<view class="sub_title">佳格食品（中国）有限公司佳格食品（中国）有限公司佳格食品（中国）有限公司</view>
+			<view class="content-wrap" v-else v-for="(item, index) in list" :key="index">
+				<view class="sub_content_wrap">
+					<view class="sub_title">{{item.title}}</view>
 					<view class="sub_info">
-						<view class="area">广东省·深圳市</view>
-						<view class="time">最近下单：2020-02-29</view>
+						<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+						<view class="time">最近下单：{{formatTime(item.createTime)}}</view>
 					</view>
-				</navigator>
-				<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-					<view class="sub_title">111佳格食品（中国）有限公司</view>
-					<view class="sub_info">
-						<view class="area">广东省·深圳市</view>
-						<view class="time">最近下单：2020-02-29</view>
-					</view>
-				</navigator>
-				<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-					<view class="sub_title">111佳格食品（中国）有限公司</view>
-					<view class="sub_info">
-						<view class="area">广东省·深圳市</view>
-						<view class="time">最近下单：2020-02-29</view>
-					</view>
-				</navigator>
-				<navigator url="" hover-class="none" open-type="navigate" class="sub_content_wrap">
-					<view class="sub_title">111佳格食品（中国）有限公司</view>
-					<view class="sub_info">
-						<view class="area">广东省·深圳市</view>
-						<view class="time">最近下单：2020-02-29</view>
-					</view>
-				</navigator> -->
+				</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { accountOpportunity } from '../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				params: {
+					pageIndex: 1,
+					pageSize: 10
+				},
+				list: []
 			};
+		},
+		onShow() {
+			accountOpportunity({...this.params}).then(res => {
+				let _d = res.data;
+				this.list = _d.list;
+			})
 		}
 	}
 </script>
@@ -75,11 +66,6 @@
 			border-top: 1px solid rgba($color: #cbcbcb, $alpha: .4);
 			transform-origin: 0 0;
 			transform: scaleY(0.5);/*缩放*/
-		}
-		&:last-child{
-			&:after{
-				border-top: none;
-			}
 		}
 		.sub_title{
 			font-size: 14px;

@@ -2,30 +2,66 @@
 	<view>
 		<view class="main-wrap">
 			<view class="list-wrap">
-				<navigator url="" class="navigator" hover-class="none">
+				<view class="navigator" @click="goto('./profileEdit',{avatar, name, gender})">
 					<view type="default">个人资料</view>
-				</navigator>
-				<navigator url="" class="navigator" hover-class="none">
+				</view>
+				<view class="navigator" @click="goto('./phoneModify',{})">
 					<view type="default">修改手机号</view>
-				</navigator>
-				<navigator url="" class="navigator" hover-class="none">
+				</view>
+				<view class="navigator" @click="goto('./changePassword',{})">
 					<view type="default">修改密码</view>
-				</navigator>
-				<navigator url="" class="navigator" hover-class="none">
-					<view type="default">意见反馈</view>
-				</navigator>
+				</view>
+				<view class="navigator">
+					
+					<button class="default" open-type='feedback' type="primary">意见反馈</button>
+				</view>
 			</view>
-			<view class="form-btn">退出登录</view>
+			<view class="form-btn" @click="logout">退出登录</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { accountInfo } from '../../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				avatar: null,
+				name: null,
+				gender: null,
+				mobile: null
 			};
+		},
+		onShow() {
+			accountInfo().then(res => {
+				console.log('profileEdit:', res)
+				let _d = res.data;
+				this.avatar = _d.avatar;
+				this.name = _d.name;
+				this.gender = _d.gender;
+				this.mobile = _d.mobile;
+			})
+		},
+		methods:{
+			logout() {
+				uni.showActionSheet({
+				    itemList: ['退出登录'],
+				    success: function (res) {
+				        uni.removeStorage({
+				        	key: 'token',
+									success: (res) => {
+										uni.navigateTo({
+											url: '../../login/index'
+										})
+									}
+				        })
+				    },
+				    fail: function (res) {
+				        console.log(res.errMsg);
+				    }
+				});
+			}
 		}
 	}
 </script>
@@ -59,6 +95,17 @@
 				&:after{
 					border-top: none;
 				}
+			}
+			.default{
+				background: none;
+				border: 0;
+				&:after{border: none;}
+				padding: 0;
+				outline: none;
+				text-align: left;
+				font-size: 14px;
+				color: #333333;
+				line-height: 50px;
 			}
 		}
 	}

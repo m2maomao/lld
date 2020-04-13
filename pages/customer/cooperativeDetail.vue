@@ -111,7 +111,7 @@
 				this.city = _d.city;
 				this.district = _d.district;
 				this.intro = _d.intro;
-				// this.visitRecord = _d.visitRecord;
+				this.visitRecord = _d.visitRecord;
 				this.orderRecord = _d.orderRecord;
 			})
 		}

@@ -4,32 +4,57 @@
 			<view class="form-item">
 				<view class="form-item-label">旧密码</view>
 				<view class="form-item-input">
-					<input placeholder="请输入旧密码" />
+					<input placeholder="请输入旧密码" password="true" v-model="oldPass" />
 				</view>
 			</view>
 			<view class="form-item">
 				<view class="form-item-label">新密码</view>
 				<view class="form-item-input">
-					<input placeholder="请输入新密码" />
+					<input placeholder="请输入新密码" password="true" v-model="newPass"/>
 				</view>
 			</view>
 			<view class="form-item">
 				<view class="form-item-label">确认密码</view>
 				<view class="form-item-input">
-					<input placeholder="请再次输入新密码" />
+					<input placeholder="请再次输入新密码" password="true" v-model="secondPass"/>
 				</view>
 			</view>
 		</view>
-		<view class="form-button">确定</view>
+		<view class="form-button" @click="submitForm">确定</view>
 	</view>
 </template>
 
 <script>
+	import { accountUpdateResetPass } from '../../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				oldPass: null,
+				newPass: null,
+				secondPass: null
 			};
+		},
+		methods:{
+			fetchData() {
+				accountUpdateResetPass({
+					newPass: this.newPass, 
+					oldPass: this.oldPass,
+				}).then(res => {
+					uni.showToast({
+						title: res.message
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1000)
+				})
+			},
+			submitForm() {
+				if(this.newPass !== this.secondPass) {
+					return uni.showToast({title: '两次输入密码不一致!'})
+				}
+				this.fetchData()
+			}
 		}
 	}
 </script>

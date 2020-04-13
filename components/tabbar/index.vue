@@ -14,8 +14,8 @@
 		<view :class="['mask',maskFlag ? 'active' : '']"></view>
 		<view :class="['add_wrap',showPanel ? 'active' : '']">
 			<view class="navigator_wrap">
-				<view class="customer" @click="goUrl('../add/customer', {})">新增潜在客户</view>
-				<view class="record" @click="goUrl('../add/record', {})">新增拜访记录</view>
+				<view class="customer" @click="goAdd('../add/customer', {})">新增潜在客户</view>
+				<view class="record" @click="goList('../customer/customer', {})">新增拜访记录</view>
 			</view>
 			<view class="close_btn" @click="hidePanelHandle"></view>
 		</view>
@@ -100,9 +100,15 @@
 				this.showPanel = true
 				this.maskFlag = true
 			},
-			goUrl(path, option){
+			goAdd(path, option) {
 				this.hidePanelHandle();
 				this.goto(path,option);
+			},
+			goList(path, option) {
+				this.hidePanelHandle();
+				uni.switchTab({
+					url: path
+				})
 			}
 		}
 	}
@@ -221,8 +227,6 @@
 				background: $chooseBgColor;
 				color: $chooseTextColor;
 			}
-
-			.text {}
 
 			.convex {
 				width: 50px;

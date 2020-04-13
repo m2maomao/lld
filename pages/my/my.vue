@@ -2,49 +2,59 @@
 	<view>
 		<view class="user-wrap">
 			<view class="avatar">
-				<img src="https://dummyimage.com/60x60/94ffff">
-				<i class="icon boy"></i>
+				<img :src="getImage(accountInfo.avatar)">
+				<i class="icon boy" v-if="accountInfo.gender.value === 1"></i>
+				<i class="icon girl" v-if="accountInfo.gender.value === 0"></i>
 			</view>
 			<view class="info">
 				<view class="privacy">
-					<view class="name">张天</view>
-					<view class="phone">15366856652</view>
+					<view class="name">{{accountInfo.name}}</view>
+					<view class="phone">{{accountInfo.mobile}}</view>
 				</view>
-				<view class="position">销售部 | 销售经理</view>
+				<view class="position">{{accountInfo.dept}} <view v-if="dept && job">|</view> {{accountInfo.job}}</view>
 			</view>
 		</view>
 		<view class="list-wrap">
-			<navigator url="" class="navigator" hover-class="none">
+			<view class="navigator" @click="goto('./cooperativeCustomer', {})">
 				<view type="default">我的合作客户</view>
-			</navigator>
-			<navigator url="" class="navigator" hover-class="none">
+			</view>
+			<view class="navigator" @click="goto('./potentialCustomer', {})">
 				<view type="default">我的潜在客户</view>
-			</navigator>
+			</view>
 		</view>
 		<view class="list-wrap">
-			<navigator url="" class="navigator" hover-class="none">
+			<view class="navigator" @click="goto('./favorite', {})">
 				<view type="default">我的商机收藏</view>
-			</navigator>
+			</view>
 		</view>
 		<view class="list-wrap">
-			<navigator url="" class="navigator" hover-class="none">
+			<view class="navigator" @click="goto('./setting/index', {})">
 				<view type="default">设置</view>
-			</navigator>
+			</view>
 		</view>
 		<tabBar currentPage="my"></tabBar>
 	</view>
 </template>
 
 <script>
+	import { accountInfo } from '../../api/api.js';
+	import { mapState } from 'vuex';
+	
 	import tabBar from '../../components/tabbar';
 	export default {
 		components:{
 			tabBar
 		},
+		computed:{
+			...mapState(['accountInfo'])
+		},
 		data() {
 			return {
 				
 			};
+		},
+		onShow() {
+			
 		}
 	}
 </script>
@@ -77,6 +87,9 @@ page {
 			bottom: 0px;
 			&.boy{
 				background: url('../../static/@2xnan.png') 0 0 / 100% auto no-repeat;
+			}
+			&.girl{
+				background: url('../../static/@2xnv.png') 0 0 / 100% auto no-repeat;
 			}
 		}
 	}

@@ -5,10 +5,11 @@
 			<view class="main-content">
 				<view class="top-info">
 					<view class="user-wrap">
-						<view class="name">早上好~,张天</view>
+						<view class="name">早上好~,{{accountInfo.name}}</view>
 						<view class="avatar">
-							<img src="https://dummyimage.com/50x50/94ffff">
-							<i class="icon boy"></i>
+							<img :src="getImage(accountInfo.avatar)">
+							<i v-show="accountInfo.gender.value === 1" class="icon boy"></i>
+							<i v-show="accountInfo.gender.value === 0" class="icon girl"></i>
 						</view>
 					</view>
 					<view class="total-info-wrap">
@@ -64,9 +65,14 @@
 	import { formatDate } from '../../libs/tools.js';
 	import { isLogin } from '../../libs/authService.js'
 	import { home } from '../../api/api';
+	import { mapState } from 'vuex'
+	
 	export default {
 		components:{
 			tabBar
+		},
+		computed:{
+			...mapState(['accountInfo'])
 		},
 		data() {
 			return {
@@ -158,6 +164,9 @@ page{
 						bottom: 0px;
 						&.boy{
 							background: url('../../static/@2xnan.png') 0 0 / 100% auto no-repeat;
+						}
+						&.girl{
+							background: url('../../static/@2xnv.png') 0 0 / 100% auto no-repeat;
 						}
 					}
 				}

@@ -29,13 +29,22 @@
 							</view>
 							<view class="phone">{{formatTime(record.visitTime)}} 于电话</view>
 						</view>
+						<view class="info-wrap">
+							<view class="info-title">{{record.matter}}</view>
+							<view class="info-single">摘要：{{record.summary}}</view>
+							<view class="info-single">费用：{{record.expense}}元</view>
+							<view class="info-single">附件：</view>
+							<view class="info-img" v-for="(attach, i) in record.attachment" :key="i">
+								<view class="file">{{attach}}</view>
+							</view>
+						</view>
 					</view>
 				</view>
 				
 			</view>
 		</view>
 		
-		<view class="form-btn">
+		<view class="form-btn" @click="goto('../add/record', {id: id,name: name,location: locationConvert(province, city, district),intro: intro})">
 			<view class="icon-add"></view>
 			<view class="txt">拜访记录</view>
 		</view>
@@ -73,9 +82,10 @@
 				this.intro = _d.intro;
 				this.mobile = _d.mobile;
 				this.name = _d.name;
+				this.customerId = _d.customerId;
 				this.position = _d.position;
 				this.province = _d.province;
-				// this.visitList = _d.visitList
+				this.visitList = _d.visitList
 			})
 		}
 	}

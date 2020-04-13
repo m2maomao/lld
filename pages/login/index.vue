@@ -24,8 +24,10 @@
 </template>
 
 <script>
- import { userLogin } from '../../api/api';
+ import { userLogin, accountInfo } from '../../api/api';
  import { isLogin } from '../../libs/authService.js';
+ import { mapState, mapMutations} from 'vuex'
+ 
 	export default {
 		data() {
 			return {
@@ -33,13 +35,21 @@
 				password: ''
 			}
 		},
-		onLoad() {
-			
+		computed:{
+			...mapState(['accountInfo'])
 		},
-		onUnload() {
-
+		onLoad() {
+			// 已登录情况，默认跳转首页
+			if (isLogin()) {
+				uni.switchTab({
+					url:'../home/home'
+				})
+			}
+		},
+		onShow() {
 		},
 		methods: {
+			...mapMutations(['setAccountInfo']),
 			login() {
 				userLogin({
 					username: this.username,
@@ -55,12 +65,19 @@
 						title: '登录成功!',
 						duration: 2000
 					})
+					// 请求获取用户数据
+					accountInfo().then(res => {
+						let _d = res.data
+						this.setAccountInfo({
+							..._d
+						})
+					})
 					// 延迟跳转
 					setTimeout(() => {
 						uni.switchTab({
 							url:"../home/home"
 						})
-					}, 2000)
+					}, 1000)
 				})
 			}
 		}

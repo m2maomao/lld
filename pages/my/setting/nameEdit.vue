@@ -4,20 +4,37 @@
 			<view class="form-item">
 				<view class="form-item-label">姓名</view>
 				<view class="form-item-input">
-					<input placeholder="请输入姓名" />
+					<input placeholder="请输入姓名" v-model="name" />
 				</view>
 			</view>
 		</view>
-		<view class="form-button">保存</view>
+		<view class="form-button" @click="updateName">保存</view>
 	</view>
 </template>
 
 <script>
+	import { accountUpdateName } from '../../../api/api.js';
+	
 	export default {
 		data() {
 			return {
-				
+				name: null
 			};
+		},
+		onShow() {
+			
+		},
+		methods:{
+			updateName() {
+				accountUpdateName({name: this.name}).then(res => {
+					uni.showToast({
+						title:res.message
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1000)
+				})
+			}
 		}
 	}
 </script>

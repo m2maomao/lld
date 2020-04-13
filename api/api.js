@@ -80,3 +80,48 @@ export const addVisitRecord = (data) => {
 export const customerVisitRecording = (params) => {
 	return request('/api/customer/visit/recording/' + params.id, 'GET' )
 }
+
+// 更新手机号
+export const accountChangePhone = (data) => {
+	return request('/api/account/change/phone', {...data}, 'POST')
+}
+
+// 我的合作客户列表
+export const accountCooperation = (params) => {
+	return request('/api/account/cooperation', {params}, 'GET')
+}
+
+// 获取用户资料
+export const accountInfo = (params) => {
+	return request('/api/account/info', {params}, 'GET')
+}
+
+// 修改手机号
+export const accountInspectPhone = (data) => {
+	return request('/api/account/inspect/phone', {...data}, 'POST')
+}
+
+// 商机列表
+export const accountOpportunity = (params) => {
+	return request('/api/account/opportunity', {...params}, 'GET')
+}
+
+// 我的潜在客户列表
+export const accountPotential = (params) => {
+	return request('/api/account/potential', {params}, 'GET')
+}
+
+// 修改性别
+export const accountUpdateGender = (data) => {
+	return request('/api/account/update/gender', {...data}, 'POST')
+}
+
+// 修改姓名
+export const accountUpdateName = (data) => {
+	return request('/api/account/update/name', {...data}, 'POST')
+}
+
+// 修改密码
+export const accountUpdateResetPass = (data) => {
+	return request('/api/account/update/resetPass', {...data}, 'POST')
+}

@@ -76,12 +76,12 @@
 				summary:'',//拜访摘要
 				attachment:[
 					{
-						"file": "11",
-						"original": "12",
-						"size": "111",
-						"title": "22",
-						"type": "111",
-						"url": "11111"
+						"file": null,
+						"original": null,
+						"size": null,
+						"title": null,
+						"type": null,
+						"url": null
 					}
 				],
 				expense:'',//费用报销
@@ -128,21 +128,29 @@
 				return `${year}-${month}-${day}`;
 			},
 			upLoadFile(){
-				const that= this;
 				uni.chooseImage({
 				    success: (chooseImageRes) => {
 				        const tempFilePaths = chooseImageRes.tempFilePaths;
-						console.log('tempFilePaths=',tempFilePaths)
-						that.attachment[0] = tempFilePaths[0];
-						
+				        uni.uploadFile({
+				            url: 'http://ip-30-fengqifeng-seller-app.coralcodes.com/api/customer/visit', //仅为示例，非真实的接口地址
+				            filePath: tempFilePaths[0],
+										header: {'Content-Type':'application/json;charset=UTF-8','Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0YWNjb3VudCIsImNyZWF0ZWQiOjE1ODY1ODg4MzE5NzYsImV4cCI6MTU4NzE5MzYzMX0.CngxCvDZyYqWuxt0qcJtSCTNUS3KUGNJhq6_magr7cjGqASBx7MkKFa0pSnFzHxyrsDT5bzgniZNVGS0YREtSg'},
+				            name: 'file',
+				            formData: {
+				                'user': 'test'
+				            },
+				            success: (uploadFileRes) => {
+				                console.log(uploadFileRes.data);
+				            }
+				        });
 				    }
 				});
 			},
 			toSaveInfo(){
 				var params = {
-					id:this.id,
 					address:this.address,
 					attachment:this.attachment,
+					customerId:this.id,
 					customerName:this.customerName,
 					expense:this.expense,
 					matter:this.matter,
