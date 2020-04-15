@@ -29,6 +29,12 @@ const store = new Vuex.Store({
 		},
 		setAvatar(state, provider) {
 			state.accountInfo.avatar = provider.avatar
+		},
+		setGender(state, provider) {
+			state.accountInfo.gender = provider.gender
+		},
+		setName(state, provider) {
+			state.accountInfo.name = provider.name
 		}
 	},
 	action: {}

@@ -14,6 +14,7 @@
 
 <script>
 	import { accountUpdateName } from '../../../api/api.js';
+	import { mapMutations } from 'vuex'
 	
 	export default {
 		data() {
@@ -21,15 +22,20 @@
 				name: null
 			};
 		},
+		computed:{
+			
+		},
 		onShow() {
 			
 		},
 		methods:{
+			...mapMutations(['setName']),
 			updateName() {
 				accountUpdateName({name: this.name}).then(res => {
 					uni.showToast({
 						title:res.message
 					})
+					this.setName({name: this.name})
 					setTimeout(() => {
 						uni.navigateBack()
 					}, 1000)

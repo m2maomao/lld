@@ -27,8 +27,8 @@ export const home = (params) => {
 }
 
 // 企业招标分页列表
-export const opportunityEnterpriseList = (params, data) => {
-	return request('/api/opportunity/enterprise-list', {params, ...data}, 'GET')
+export const opportunityEnterpriseList = (params) => {
+	return request('/api/opportunity/enterprise-list', {...params}, 'GET')
 }
 
 // 企业招标详情
@@ -37,8 +37,8 @@ export const opportunityEnterprise = (params) => {
 }
 
 // 公海客户分页列表
-export const opportunityCustomerList = (params, data) => {
-	return request('/api/opportunity/public-customer-list', {params, ...data}, 'GET')
+export const opportunityCustomerList = (params) => {
+	return request('/api/opportunity/public-customer-list', {...params}, 'GET')
 }
 
 // 公海客户详情

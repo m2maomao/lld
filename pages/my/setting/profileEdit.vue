@@ -16,7 +16,7 @@
 					<view type="default">性别</view>
 					<view class="content" >
 						<picker @change="bindPickerChange" :value="genderIndex" :range="genderArray" class="uni-input-wrap">
-							<view class="uni-input">{{genderArray[genderIndex]}}</view>
+							<view class="uni-input">{{accountInfo.gender.description}}</view>
 						</picker>
 					</view>
 				</view>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-	import { accountUpdateGender } from '../../../api/api.js';
+	import { accountUpdateGender, accountUpdateAvatar } from '../../../api/api.js';
 	import {API_ROOT} from '@/api/config.js';
 	
 	import { mapState, mapMutations } from 'vuex';
@@ -34,7 +34,7 @@
 	export default {
 		data() {
 			return {
-				genderArray: ['女', '男'],
+				genderArray: ['男', '女'],
 				genderIndex: null,
 			};
 		},
@@ -42,12 +42,16 @@
 			...mapState(['accountInfo'])
 		},
 		methods: {
-			...mapMutations(['setAvatar']),
+			...mapMutations(['setAvatar', 'setGender']),
 			bindPickerChange: function(e) {
-				console.log('picker发送选择改变，携带值为', e.target.value)
-				this.genderIndex = e.target.value
+				this.genderIndex = parseInt(e.target.value) + 1
 				accountUpdateGender({gender: this.genderIndex}).then(res => {
-					console.log(res)
+					this.setGender({
+						gender: {
+							value: this.genderIndex,
+							description: this.genderArray[this.genderIndex - 1]
+						}
+					})
 				})
 			},
 			upLoadFile(){
@@ -58,13 +62,18 @@
 							url: API_ROOT + '/api/ueditor?action=uploadfile',
 							filePath: tempFilePaths[0],
 							header: {
+								'Content-Type': 'multiple/form-data',
 								'Authorization': 'Bearer ' + uni.getStorageSync('token')
 							},
 							name: 'upfile',
 							success: (uploadFileRes) => {
-								console.log('uploadFileRes.data', uploadFileRes.data);
 								let _d = JSON.parse(uploadFileRes.data);
-								this.setAvatar({avatar: _d.avatar})
+								accountUpdateAvatar({avatar: _d}).then(res => {
+									uni.showToast({
+										title: res.message
+									})
+									this.setAvatar({avatar: this.getImage(_d.url)})
+								})
 							},
 							fail: (res) => {
 								console.log(res)
@@ -75,7 +84,7 @@
 			}
 		},
 		onReady() {
-			this.genderIndex = this.accountInfo.gender.value
+			this.genderIndex = parseInt(this.accountInfo.gender.value - 1)
 		}
 	}
 </script>

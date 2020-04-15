@@ -2,14 +2,14 @@
 	<view>
 		<view class="main-wrap">
 			<view class="top-bar"></view>
-			<view class="main-content">
+			<view class="main-content" v-if="accountInfo.avatar">
 				<view class="top-info">
 					<view class="user-wrap">
 						<view class="name">早上好~,{{accountInfo.name}}</view>
 						<view class="avatar">
 							<img :src="getImage(accountInfo.avatar)">
-							<i v-if="parseInt(accountInfo.gender.value) === 1" class="icon boy"></i>
-							<i v-if="parseInt(accountInfo.gender.value) === 0" class="icon girl"></i>
+							<i v-if="accountInfo.gender.value === 1" class="icon boy"></i>
+							<i v-if="accountInfo.gender.value === 2" class="icon girl"></i>
 						</view>
 					</view>
 					<view class="total-info-wrap">

@@ -97,8 +97,8 @@
 				enterpriseParams: {
 					asc: null,
 					desc: null,
-					pageSize: null,
-					pageIndex: null,
+					pageSize: 20,
+					pageIndex: 1,
 					keyword: ''
 				},
 				// 企业招标列表数据
@@ -107,8 +107,8 @@
 				customerParams: {
 					asc: null,
 					desc: null,
-					pageSize: null,
-					pageIndex: null,
+					pageSize: 20,
+					pageIndex: 1,
 					keyword: ''
 				},
 				// 公海客户列表数据

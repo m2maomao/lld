@@ -103,25 +103,55 @@
 				emptyFlag: true,
 				// 企业招标列表数据
 				enterpriseList: [],
+				// 企业招标传参
+				enterpriseParams: {
+					asc: null,
+					desc: null,
+					pageSize: 20,
+					pageIndex: 1,
+					keyword: ''
+				},
 				// 公海客户列表数据
 				customerList: [],
+				// 公海客户传参
+				customerParams: {
+					asc: null,
+					desc: null,
+					pageSize: 20,
+					pageIndex: 1,
+					keyword: ''
+				},
 				// 合作客户列表
-				cooperationCustomerData: {},//
+				cooperationCustomerData: {},
+				// 合作客户列表传参
+				cooperationCustomerParams: {
+					asc: null,
+					desc: null,
+					pageSize: 20,
+					pageIndex: 1,
+					keyword: ''
+				},
 				// 潜在客户列表
-				potentialCustomerData: {}
+				potentialCustomerData: {},
+				// 潜在客户列表传参
+				potentialCustomerParams: {
+					asc: null,
+					desc: null,
+					pageSize: 20,
+					pageIndex: 1,
+					keyword: ''
+				}
 			};
 		},
 		onLoad(option) {
-			console.log('option:', option)
 			this.searchWord = decodeURIComponent(option.searchWord)
 			this.tabMenuSelected = decodeURIComponent(option.tabMenuSelected)
-			console.log('this.searchWord', this.searchWord)
-			console.log('this.tabMenuSelected', this.tabMenuSelected)
 		},
 		methods:{
 			fetchData() {
 				switch(this.tabMenuSelected) {
 					case '企业招标':
+					this.enterpriseParams.keyword = this.searchWord
 						// 获取企业招标列表
 						opportunityEnterpriseList(this.enterpriseParams).then(res => {
 							console.log('招标res:', res)
@@ -131,6 +161,7 @@
 						});
 						break;
 					case '公海客户':
+						this.customerParams.keyword = this.searchWord
 						// 获取公海客户列表
 						opportunityCustomerList(this.customerParams).then(res => {
 							console.log('客户res:', res)
@@ -140,16 +171,18 @@
 						});
 						break;
 					case '合作客户':
+						this.cooperationCustomerParams.keyword = this.searchWord
 						// 获取合作客户
-						cooperationCustomerList().then(res => {
+						cooperationCustomerList(this.cooperationCustomerParams).then(res => {
 							this.cooperationCustomerData = res.data
 							this.changeEmptyFlag(this.cooperationCustomerData.list)
 							console.log('cooperationCustomerData:', this.cooperationCustomerData)
 						});
 						break;
 						case '潜在客户':
+							this.potentialCustomerParams.keyword = this.searchWord
 							// 获取潜在客户
-							potentialCustomerList().then(res => {
+							potentialCustomerList(this.potentialCustomerParams).then(res => {
 								this.potentialCustomerData = res.data
 								this.changeEmptyFlag(this.potentialCustomerData.list)
 								console.log('potentialCustomerData:', this.potentialCustomerData)

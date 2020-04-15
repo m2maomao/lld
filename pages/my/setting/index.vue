@@ -56,6 +56,9 @@
 										})
 									}
 				        })
+						uni.removeStorage({
+							key:'accountInfo'
+						})
 				    },
 				    fail: function (res) {
 				        console.log(res.errMsg);
