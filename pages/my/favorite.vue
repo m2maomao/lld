@@ -29,7 +29,7 @@
 								<view class="time">发布时间：{{formatTime(item.createTime)}}</view>
 							</view>
 						</view>
-						<view class="remove" :style="{'width': item.ifConfirmDelete&&deletingIndex ==index ? '210rpx': '100rpx','right':item.ifConfirmDelete&&deletingIndex == index ? '-210rpx': '-100rpx'}">
+						<view class="remove">
 							<view class="removeTxt delete1" v-if="!item.ifConfirmDelete" @click="delItem1(index)"> <view class="circle"><img src="../../static/@2xshanchu.png"></view></view>
 							<view class="removeTxt delete2" @click="delItem(index)" v-else> <view class="circle1" ><img src="../../static/@2xshanchu.png">确认删除</view></view>
 						</view>
@@ -149,7 +149,8 @@
 				this.ifScrollForbidden = true;
 				this.delBtnWidth = 210;
 				
-				this.list[index].right = this.delBtnWidth
+				// this.list[index].right = this.delBtnWidth
+				this.list[index].right = 100
 			},
 			/**
 			 * 确认删除
@@ -209,13 +210,13 @@
 		}
 		.order-item{
 			width: 100%;
-			display: -webkit-box;
-			display: -webkit-flex;
 			display: flex;
 			position: relative;
 			background: #fff;
 			border-bottom: 1px solid #e5e5e5;
 			padding: 10px 0;
+			justify-content: right;
+			align-items: flex-end;
 			.content{
 				width: 100%;
 			}
@@ -244,7 +245,6 @@
 				.time{}
 			}
 			.remove{
-				width:100rpx;
 				height:100%;
 				// background:#002140;
 				color:#fff;
