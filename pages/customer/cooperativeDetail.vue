@@ -1,69 +1,71 @@
 <template>
 	<view class="container">
-		<view class="main-top">
-			<view class="title">{{name}}</view>
-			<view class="info-wrap">
-				<view class="location">{{locationConvert(province, city, district)}}</view>
-			</view>
-			<view class="introduction">{{intro}}</view>
-		</view>
-
-		<view class="main-content">
-			<view class="menu">
-				<view class="btn_wrap">
-					<view :class="['btn', index === tabSelected ? 'active' : '']" v-for="(tab, index) in tabMenu" @click="tabHandle(index)"
-					 :key="index">{{tab}}</view>
+		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-wrap">
+			<view class="main-top">
+				<view class="title">{{name}}</view>
+				<view class="info-wrap">
+					<view class="location">{{locationConvert(province, city, district)}}</view>
 				</view>
+				<view class="introduction">{{intro}}</view>
 			</view>
 
-			<view class="record-wrap" v-show="tabSelected === 0">
-				<view class="empty" v-if="!visitRecord.length > 0">
-					<view class="txt">暂无记录</view>
+			<view class="main-content">
+				<view class="menu">
+					<view class="btn_wrap">
+						<view :class="['btn', index === tabSelected ? 'active' : '']" v-for="(tab, index) in tabMenu" @click="tabHandle(index)"
+						 :key="index">{{tab}}</view>
+					</view>
 				</view>
-				<view class="record-wrap-inner" v-for="(record, r) in visitRecord" :key="r" v-else>
-					<view class="record-box">
-						<view class="user-wrap">
-							<view class="user-info">
-								<image class="img" :src="getImage(record.avatar)"></image>
-								<view class="name">{{record.userName}}</view>
+
+				<view class="record-wrap" v-show="tabSelected === 0">
+					<view class="empty" v-if="!visitRecord.length > 0">
+						<view class="txt">暂无记录</view>
+					</view>
+					<view class="record-wrap-inner" v-for="(record, r) in visitRecord" :key="r" v-else>
+						<view class="record-box">
+							<view class="user-wrap">
+								<view class="user-info">
+									<image class="img" :src="getImage(record.avatar)"></image>
+									<view class="name">{{record.userName}}</view>
+								</view>
+								<view class="phone">{{formatTime(record.visitTime)}} 于电话</view>
 							</view>
-							<view class="phone">{{formatTime(record.visitTime)}} 于电话</view>
+							<view class="info-wrap">
+								<view class="info-title">{{record.matter}}</view>
+								<view class="info-single">摘要：{{record.summary}}</view>
+								<view class="info-single">费用：{{record.expense}}元</view>
+								<view class="info-single">附件：</view>
+								<view class="info-img" v-for="(attach, i) in record.attachment" :key="i">
+									<view class="file">{{attach}}</view>
+								</view>
+							</view>
 						</view>
-						<view class="info-wrap">
-							<view class="info-title">{{record.matter}}</view>
-							<view class="info-single">摘要：{{record.summary}}</view>
-							<view class="info-single">费用：{{record.expense}}元</view>
-							<view class="info-single">附件：</view>
-							<view class="info-img" v-for="(attach, i) in record.attachment" :key="i">
-								<view class="file">{{attach}}</view>
+					</view>
+				</view>
+
+				<view class="order-wrap" v-show="tabSelected === 1">
+					<view class="empty" v-if="!orderRecord.length > 0">
+						<view class="txt">暂无记录</view>
+					</view>
+					<view class="order-wrap-inner" v-for="(order, o) in orderRecord" :key="o" v-else>
+						<view class="order-box">
+							<view class="tip">
+								<view class="time">{{formatTime(order.deliveryTime)}}</view>
+								<view class="status">已交付</view>
 							</view>
+							<view class="info-single">{{order.name}}</view>
+							<view class="info-single">规格：{{order.norms}}</view>
+							<view class="info-single">数量：{{order.number}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="order-wrap" v-show="tabSelected === 1">
-				<view class="empty" v-if="!orderRecord.length > 0">
-					<view class="txt">暂无记录</view>
-				</view>
-				<view class="order-wrap-inner" v-for="(order, o) in orderRecord" :key="o" v-else>
-					<view class="order-box">
-						<view class="tip">
-							<view class="time">{{formatTime(order.deliveryTime)}}</view>
-							<view class="status">已交付</view>
-						</view>
-						<view class="info-single">{{order.name}}</view>
-						<view class="info-single">规格：{{order.norms}}</view>
-						<view class="info-single">数量：{{order.number}}</view>
-					</view>
-				</view>
+			<view class="form-btn" @click="goto('../add/record', {id: id,name: name,location: locationConvert(province, city, district),intro: intro})">
+				<view class="icon-add"></view>
+				<view class="txt">拜访记录</view>
 			</view>
-		</view>
-
-		<view class="form-btn" @click="goto('../add/record', {id: id,name: name,location: locationConvert(province, city, district),intro: intro})">
-			<view class="icon-add"></view>
-			<view class="txt">拜访记录</view>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -81,7 +83,7 @@
 				id: null,
 				params: {
 					pageIndex: 1,
-					pageSize: 10
+					pageSize: 5
 				},
 				// 拜访记录  
 				name: null,
@@ -97,6 +99,30 @@
 			// tab切换
 			tabHandle(index) {
 				this.tabSelected = index
+			},
+			loadData() {
+				console.log('~~', {id: this.id, ...this.params})
+				customerVisitRecording({id: this.id, ...this.params}).then(res => {
+					let _d = res.data;
+					this.params.pageIndex++;
+					this.name = _d.name;
+					this.province = _d.province;
+					this.city = _d.city;
+					this.district = _d.district;
+					this.intro = _d.intro;
+					// 判断当前页是否还有数据
+					if (_d.visitRecord.length > 0) {
+						this.visitRecord.push(..._d.visitRecord);
+					}
+					if (this.orderRecord.length > 0) {
+						this.orderRecord.push(..._d.orderRecord);
+					}
+				})
+			},
+			// 滚动加载
+			loadMore() {
+				console.log('loadMore')				
+				this.loadData()
 			}
 		},
 		onLoad(option) {
@@ -131,7 +157,9 @@
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
-
+		.scroll-wrap{
+			height: 100vh;
+		}
 		.main-top {
 			color: #FFFFFF;
 			padding: 20px 20px 20px 20px;

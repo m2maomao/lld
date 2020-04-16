@@ -18,11 +18,13 @@
 						<view class="btn_wrap">
 							<view :class="['btn', index === tabSelected ? 'active' : '']" v-for="(tab, index) in tabMenu" @click="tabHandle(index)" :key="index">{{tab}}</view>
 						</view>
-						<view class="search_btn"></view>
+						<view class="search_btn" @click="showSearch"></view>
 					</view>
+					<!-- 企业招标滚动 -->
 					<scroll-view 
 						:scroll-y="innerScroll"
 						@scrolltoupper="innerScrollHandle"
+						@scrolltolower="loadMore(0)"
 						:upper-threshold="50"
 						:scroll-into-view="true" 
 						class="content"
@@ -43,9 +45,11 @@
 							</view>
 						</view>
 					</scroll-view>
+					<!-- 公海客户滚动 -->
 					<scroll-view
 						:scroll-y="innerScroll"
 						@scrolltoupper="innerScrollHandle"
+						@scrolltolower="loadMore(1)"
 						:upper-threshold="50"
 						:scroll-into-view="true" 
 						class="content"
@@ -95,41 +99,78 @@
 				searchWord: null,
 				// 企业招标传参
 				enterpriseParams: {
-					asc: null,
-					desc: null,
 					pageSize: 20,
 					pageIndex: 1,
-					keyword: ''
+					totalPage: 1
 				},
 				// 企业招标列表数据
 				enterpriseList: [],
 				// 公海客户传参
 				customerParams: {
-					asc: null,
-					desc: null,
 					pageSize: 20,
 					pageIndex: 1,
-					keyword: ''
+					totalPage: 1
 				},
 				// 公海客户列表数据
 				customerList: []
 			};
 		},
+		onShow() {
+			this.loadMore(2)
+		},
 		onLoad() {
-			// 获取企业招标列表
-			opportunityEnterpriseList(this.enterpriseParams).then(res => {
-				console.log('招标res:', res)
-				let _d = res.data
-				this.enterpriseList = _d.list
-			})
-			// 获取公海客户列表
-			opportunityCustomerList(this.customerParams).then(res => {
-				console.log('客户res:', res)
-				let _d = res.data
-				this.customerList = _d.list
-			})
 		},
 		methods:{
+			loadMore(type) {
+				if(type === 0) {
+					console.log('滚动企业招标')
+					if(this.enterpriseParams.totalPage >= this.enterpriseParams.pageIndex) {
+						this.loadDataEnterpriseList()
+						this.enterpriseParams.pageIndex++;
+					}
+				} else if(type === 1) {
+					console.log('滚动公海客户')
+					if(this.customerParams.totalPage >= this.customerParams.pageIndex) {
+						this.loadDataCustomerList()
+						this.customerParams.pageIndex++;
+					}
+				} else {
+					this.loadDataEnterpriseList();
+					this.loadDataCustomerList();
+				}
+			},
+			loadDataEnterpriseList() {
+				// 获取企业招标列表
+				opportunityEnterpriseList({...this.enterpriseParams}).then(res => {
+					console.log('招标res:', res)
+					let _d = res.data
+					this.enterpriseParams.totalPage = _d.totalPage;
+					if(this.enterpriseParams.pageIndex > 1) {
+						this.enterpriseList.push(..._d.list)
+					} else {
+						this.enterpriseList = _d.list
+					}
+					if(this.enterpriseParams.totalPage > this.enterpriseParams.pageIndex) {
+						this.enterpriseParams.pageIndex++;
+					}
+				})
+			},
+			loadDataCustomerList() {
+				// 获取公海客户列表
+				opportunityCustomerList({...this.customerParams}).then(res => {
+					console.log('客户res:', res)
+					let _d = res.data
+					this.customerParams.totalPage = _d.totalPage;
+					if(this.customerParams.totalPage > 1) {
+						this.customerList.push(..._d.list)
+					} else {
+						this.customerList = _d.list
+					}
+					if(this.customerParams.totalPage > this.customerParams.pageIndex) {
+						this.customerParams.pageIndex++;
+					}
+				})
+			},
 			// 外层容器滚动视差
 			scrollHandle(event) {
 				let st = event.detail.scrollTop
@@ -148,6 +189,12 @@
 			// tab切换
 			tabHandle(index) {
 				this.tabSelected = index
+			},
+			// 显示搜索框
+			showSearch() {
+				// 顶部搜索框获取焦点
+				this.searchToolFlag = false
+				this.innerScroll = false
 			}
 		}
 	}

@@ -48,7 +48,7 @@ export const opportunityPublicCustomerDetail = (params) => {
 
 // 拜访记录分页列表
 export const visitList = (params) => {
-	return request('/api/opportunity/public-customer/' + params.id + '/visit-list','GET')
+	return request('/api/opportunity/public-customer/' + params.id + '/visit-list', {...params}, 'GET')
 }
 
 // 合作客户列表
@@ -63,7 +63,7 @@ export const addPotentialCustomer = (data) => {
 
 // 潜在客户详情
 export const potentialCustomerDetail = (params) => {
-	return request('/api/customer/potential/detail/' + params.id, 'GET')
+	return request('/api/customer/potential/detail/' + params.id, {...params}, 'GET')
 }
 
 // 潜在客户列表
@@ -78,7 +78,7 @@ export const addVisitRecord = (data) => {
 
 // 拜访记录
 export const customerVisitRecording = (params) => {
-	return request('/api/customer/visit/recording/' + params.id, 'GET' )
+	return request('/api/customer/visit/recording/' + params.id, {...params}, 'GET' )
 }
 
 // 更新手机号

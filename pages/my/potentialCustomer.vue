@@ -1,14 +1,16 @@
 <template>
 	<view>
 		<view class="main-wrap">
-			<view class="sub_content_wrap" v-for="(item, index) in list" :key="index">
-				<view class="sub_title">{{item.name}}</view>
-				<view class="sub_content">{{item.intro}}</view>
-				<view class="sub_info">
-					<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
-					<view class="time">最近跟进：{{formatTime(item.updateTime)}}</view>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-wrap">
+				<view class="sub_content_wrap" v-for="(item, index) in list" :key="index">
+					<view class="sub_title">{{item.name}}</view>
+					<view class="sub_content">{{item.intro}}</view>
+					<view class="sub_info">
+						<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+						<view class="time">最近跟进：{{formatTime(item.updateTime)}}</view>
+					</view>
 				</view>
-			</view>
+			</scroll-view>
 		</view>
 	</view>
 </template>
@@ -19,21 +21,44 @@
 	export default {
 		data() {
 			return {
-				list: []
+				list: [],
+				params: {
+					pageIndex: 1,
+					pageSize: 20,
+					totalPage: 1
+				}
 			};
 		},
 		onShow() {
-			accountPotential().then(res => {
-				console.log(res)
-				let _d = res.data;
-				this.list = _d.list
-			})
+			this.loadData()
+		},
+		methods: {
+			loadData() {
+				accountPotential({...this.params}).then(res => {
+					let _d = res.data;
+					this.params.totalPage = _d.totalPage;
+					this.list.push(..._d.list);
+					if(this.params.totalPage > this.params.pageIndex) {
+						this.params.pageIndex++;
+					}
+				})
+			},
+			// 滚动加载
+			loadMore() {
+				if(this.params.totalPage >= this.params.pageIndex) {
+					this.loadData()
+					this.params.pageIndex++;
+				}
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
 .main-wrap{
+	.scroll-wrap{
+		height: 100vh; 
+	}
 	.sub_content_wrap{
 		padding: 15px 20px 0 20px;
 		&:after{

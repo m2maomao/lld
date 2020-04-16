@@ -18,11 +18,13 @@
 						<view class="btn_wrap">
 							<view :class="['btn', index === tabSelected ? 'active' : '']" v-for="(tab, index) in tabMenu" @click="tabHandle(index)" :key="index">{{tab}}</view>
 						</view>
-						<view class="search_btn"></view>
+						<view class="search_btn" @click="showSearch"></view>
 					</view>
+					<!-- 合作客户分页 -->
 					<scroll-view
 						:scroll-y="innerScroll"
 						@scrolltoupper="innerScrollHandle"
+						@scrolltolower="loadMore(0)"
 						:upper-threshold="50"
 						:scroll-into-view="true" 
 						class="content"
@@ -30,7 +32,7 @@
 					>
 						<view 
 							class="sub_content_wrap"
-							v-for="(item, index) in cooperationCustomerData.list"
+							v-for="(item, index) in cooperationCustomerData"
 							:key="index"
 							@click="goto('./cooperativeDetail', {id: item.id})"
 						>
@@ -43,9 +45,11 @@
 						</view>
 						
 					</scroll-view>
+					<!-- 潜在客户分页 -->
 					<scroll-view
 						:scroll-y="innerScroll"
 						@scrolltoupper="innerScrollHandle"
+						@scrolltolower="loadMore(1)"
 						:upper-threshold="50"
 						:scroll-into-view="true" 
 						class="content"
@@ -53,7 +57,7 @@
 					>
 						<view
 							class="sub_content_wrap"
-							v-for="(item, index) in potentialCustomerData.list"
+							v-for="(item, index) in potentialCustomerData"
 							:key="index"
 							@click="goto('./potentialDetail', {id: item.id})"
 						>
@@ -91,16 +95,79 @@
 				tabMenu: ['合作客户', '潜在客户'],
 				tabSelected: 0,
 				// 合作客户列表
-				cooperationCustomerData: {},//
+				cooperationCustomerData: [],
+				// 合作客户传参
+				cooperationCustomerParams: {
+					pageSize: 10,
+					pageIndex: 1,
+					totalPage: 1
+				},
 				// 潜在客户列表
-				potentialCustomerData: {}
+				potentialCustomerData: [],
+				// 潜在客户传参
+				potentialCustomerParams: {
+					pageSize: 5,
+					pageIndex: 1,
+					totalPage: 1
+				}
 			};
 		},
 		methods:{
+			loadMore(type) {
+				if(type === 0) {
+					console.log('合作客户')
+					if(this.cooperationCustomerParams.totalPage >= this.cooperationCustomerParams.pageIndex) {
+						this.loadDataCooperationCustomer()
+						this.cooperationCustomerParams.pageIndex++;
+					}
+				} else if(type === 1) {
+					console.log('潜在客户')
+					if(this.potentialCustomerParams.totalPage >= this.potentialCustomerParams.pageIndex) {
+						this.loadDataPotentialCustomer()
+						this.potentialCustomerParams.pageIndex++;
+					}
+				} else {
+					this.loadDataPotentialCustomer();
+					this.loadDataCooperationCustomer();
+				}
+			},
+			loadDataCooperationCustomer() {
+				// 获取合作客户列表
+				cooperationCustomerList({...this.cooperationCustomerParams}).then(res => {
+					console.log('hezuokehu:', res)
+					let _d = res.data
+					this.cooperationCustomerParams.totalPage = _d.totalPage;
+					if(this.cooperationCustomerParams.pageIndex > 1) {
+						this.cooperationCustomerData.push(..._d.list)
+					} else {
+						this.cooperationCustomerData = _d.list
+					}
+					if(this.cooperationCustomerParams.totalPage > this.cooperationCustomerParams.pageIndex) {
+						this.cooperationCustomerParams.pageIndex++;
+					}
+					console.log('this.cooperationCustomerData', this.cooperationCustomerData)
+				})
+			},
+			loadDataPotentialCustomer() {
+				// 获取潜在客户列表
+				potentialCustomerList({...this.potentialCustomerParams}).then(res => {
+					console.log('qianzaikehu:', res)
+					let _d = res.data
+					this.potentialCustomerParams.totalPage = _d.totalPage;
+					if(this.potentialCustomerParams.totalPage > 1) {
+						this.potentialCustomerData.push(..._d.list)
+					} else {
+						this.potentialCustomerData = _d.list
+					}
+					if(this.potentialCustomerParams.totalPage > this.potentialCustomerParams.pageIndex) {
+						this.potentialCustomerParams.pageIndex++;
+					}
+					console.log('this.potentialCustomerData', this.potentialCustomerData)
+				})
+			},
 			// 外层容器滚动视差
 			scrollHandle(event) {
 				let st = event.detail.scrollTop
-				console.log("最外层滚动条:", st)
 				// 判断是否锁住顶部
 				if(st > 96) {
 					this.searchToolFlag = true
@@ -115,19 +182,16 @@
 			// tab切换
 			tabHandle(index) {
 				this.tabSelected = index
+			},
+			// 显示搜索框
+			showSearch() {
+				// 顶部搜索框获取焦点
+				this.searchToolFlag = false
+				this.innerScroll = false
 			}
 		},
 		onShow() {
-			// 获取合作客户
-			cooperationCustomerList().then(res => {
-				this.cooperationCustomerData = res.data
-				console.log('cooperationCustomerData:', this.cooperationCustomerData)
-			}),
-			// 获取潜在客户
-			potentialCustomerList().then(res => {
-				this.potentialCustomerData = res.data
-				console.log('potentialCustomerData:', this.potentialCustomerData)
-			})
+			this.loadMore(2)
 		}
 	}
 </script>

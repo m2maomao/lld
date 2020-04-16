@@ -1,53 +1,55 @@
 <template>
 	<view class="container">
-		<view class="main-top">
-			<view class="title">{{name}}</view>
-			<view class="info-wrap">
-					<view class="location">{{locationConvert(province, city, district)}}</view>
-			</view>
-			<view class="introduction">{{intro}}</view>
-		</view>
-		
-		<view class="main-content">
-			<view class="contact-wrap">
-				<view class="contact-title">客户联系人</view>
-				<view class="info-single">联系人：{{contact}}</view>
-				<view class="info-single">部门职位：{{position}}</view>
-				<view class="info-single">联系电话：{{mobile}}</view>
-			</view>
-			<view class="record-wrap">
-				<view class="record-title">拜访记录</view>
-				<view class="empty" v-if="!visitList.length > 0">
-					<view class="txt">暂无记录</view>
+		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-wrap">
+			<view class="main-top">
+				<view class="title">{{name}}</view>
+				<view class="info-wrap">
+						<view class="location">{{locationConvert(province, city, district)}}</view>
 				</view>
-				<view class="record-wrap-inner" v-for="(record, r) in visitList" :key="r" v-else>
-					<view class="record-box">
-						<view class="user-wrap">
-							<view class="user-info">
-								<image class="img" :src="getImage(record.avatar)"></image>
-								<view class="name">{{record.userName}}</view>
+				<view class="introduction">{{intro}}</view>
+			</view>
+			
+			<view class="main-content">
+				<view class="contact-wrap">
+					<view class="contact-title">客户联系人</view>
+					<view class="info-single">联系人：{{contact}}</view>
+					<view class="info-single">部门职位：{{position}}</view>
+					<view class="info-single">联系电话：{{mobile}}</view>
+				</view>
+				<view class="record-wrap">
+					<view class="record-title">拜访记录</view>
+					<view class="empty" v-if="!visitList.length > 0">
+						<view class="txt">暂无记录</view>
+					</view>
+					<view class="record-wrap-inner" v-for="(record, r) in visitList" :key="r" v-else>
+						<view class="record-box">
+							<view class="user-wrap">
+								<view class="user-info">
+									<image class="img" :src="getImage(record.avatar)"></image>
+									<view class="name">{{record.userName}}</view>
+								</view>
+								<view class="phone">{{formatTime(record.visitTime)}} 于电话</view>
 							</view>
-							<view class="phone">{{formatTime(record.visitTime)}} 于电话</view>
-						</view>
-						<view class="info-wrap">
-							<view class="info-title">{{record.matter}}</view>
-							<view class="info-single">摘要：{{record.summary}}</view>
-							<view class="info-single">费用：{{record.expense}}元</view>
-							<view class="info-single">附件：</view>
-							<view class="info-img" v-for="(attach, i) in record.attachment" :key="i">
-								<view class="file">{{attach}}</view>
+							<view class="info-wrap">
+								<view class="info-title">{{record.matter}}</view>
+								<view class="info-single">摘要：{{record.summary}}</view>
+								<view class="info-single">费用：{{record.expense}}元</view>
+								<view class="info-single">附件：</view>
+								<view class="info-img" v-for="(attach, i) in record.attachment" :key="i">
+									<view class="file">{{attach}}</view>
+								</view>
 							</view>
 						</view>
 					</view>
+					
 				</view>
-				
 			</view>
-		</view>
-		
-		<view class="form-btn" @click="goto('../add/record', {id: id,name: name,location: locationConvert(province, city, district),intro: intro})">
-			<view class="icon-add"></view>
-			<view class="txt">拜访记录</view>
-		</view>
+			
+			<view class="form-btn" @click="goto('../add/record', {id: id,name: name,location: locationConvert(province, city, district),intro: intro})">
+				<view class="icon-add"></view>
+				<view class="txt">拜访记录</view>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -58,6 +60,10 @@
 		data() {
 			return {
 				id: null,
+				params: {
+					pageIndex: 1,
+					pageSize: 5
+				},
 				city: null,
 				contact: null,
 				district: null,
@@ -73,20 +79,39 @@
 			this.id = option.id;
 		},
 		onShow() {
-			potentialCustomerDetail({id: this.id}).then(res => {
-				console.log('潜在客户详情：', res)
-				let _d = res.data;
-				this.city = _d.city;
-				this.contact = _d.contact;
-				this.district = _d.district;
-				this.intro = _d.intro;
-				this.mobile = _d.mobile;
-				this.name = _d.name;
-				this.customerId = _d.customerId;
-				this.position = _d.position;
-				this.province = _d.province;
-				this.visitList = _d.visitList
-			})
+			this.loadData()
+		},
+		methods:{
+			loadData() {
+				potentialCustomerDetail({id: this.id, ...this.params}).then(res => {
+					console.log('潜在客户详情：', res)
+					let _d = res.data;
+					this.params.pageIndex++;
+					this.city = _d.city;
+					this.avatar = _d.avatar
+					
+					this.contact = _d.contact;
+					this.district = _d.district;
+					this.intro = _d.intro;
+					this.mobile = _d.mobile;
+					this.name = _d.name;
+					this.customerId = _d.customerId;
+					this.position = _d.position;
+					this.province = _d.province;
+					// this.visitList.push(..._d.visitList);
+					console.log('visitList', this.visitList)
+					
+					// 判断当前页是否还有数据
+					if (_d.visitList.length > 1) {
+						this.visitList.push(..._d.visitList);
+					}
+				})
+			},
+			// 滚动加载
+			loadMore() {
+				console.log('loadMore')				
+				this.loadData()
+			}
 		}
 	}
 </script>
@@ -99,6 +124,9 @@ page{
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
+	.scroll-wrap{
+		height: 100vh;
+	}
 	.main-top{
 		color: #FFFFFF;
 		padding: 20px 20px 20px 20px;

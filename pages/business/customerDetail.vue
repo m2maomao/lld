@@ -1,49 +1,46 @@
 <template>
 	<view class="container">
-		<view class="main-top">
-			<view class="title">{{name}}</view>
-			<view class="info-wrap">
-					<view class="location">{{locationConvert(province, city, district)}}</view>
-					<view class="time">{{formatTime(updateTime)}}</view>
-			</view>
-			<view class="introduction" v-html="intro"></view>
-		</view>
-		
-		<view class="main-content">
-			<view class="record-wrap">
-				<view class="record-title">拜访记录</view>
-				
-				<view class="record-container" v-for="(item,index) in recordList" :key="index">
-					<view :class="['record-box', item.attachment.length ? '' : 'border' ]">
-						<view class="user-wrap">
-							<view class="user-info">
-								<image class="img" :src="getImage(item.avatar)"></image>
-								<view class="name">{{item.userName}}</view>
-							</view>
-							<view class="phone">{{formatTime(item.visitTime)}} 于电话</view>
-						</view>
-						<view class="info-wrap">
-							<view class="info-title">商讨合作</view>
-							<view class="info-single">摘要：{{item.summary}}</view>
-							<view class="info-single">费用：{{item.expense ? item.expense + '元' : ''}}</view>
-							<view class="info-single attachment">附件：</view>
-							<view class="info-img" v-for="(attach, i) in item.attachment" :key="i">
-								<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-								<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-								<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-								<image src="https://dummyimage.com/56x56/595fff/fff" class="img"></image>
-							</view>
-						</view>
-					</view>
+		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-wrap">
+			<view class="main-top">
+				<view class="title">{{name}}</view>
+				<view class="info-wrap">
+						<view class="location">{{locationConvert(province, city, district)}}</view>
+						<view class="time">{{formatTime(updateTime)}}</view>
 				</view>
-
+				<view class="introduction" v-html="intro"></view>
 			</view>
-		</view>
-		
-		<view class="form-btn" @click="goto('../add/record', {id:id,name:name,location:locationConvert(province, city, district),intro:intro})">
-			<view class="icon-add"></view>
-			<view class="txt">我来跟进</view>
-		</view>
+			
+			<view class="main-content">
+				<view class="record-wrap">
+					<view class="record-title">拜访记录</view>
+						<view class="record-container" v-for="(item,index) in recordList" :key="index">
+							<view :class="['record-box', item.attachment.length ? '' : 'border' ]">
+								<view class="user-wrap">
+									<view class="user-info">
+										<image class="img" :src="getImage(item.avatar)"></image>
+										<view class="name">{{item.userName}}</view>
+									</view>
+									<view class="phone">{{formatTime(item.visitTime)}} 于电话</view>
+								</view>
+								<view class="info-wrap">
+									<view class="info-title">商讨合作</view>
+									<view class="info-single">摘要：{{item.summary}}</view>
+									<view class="info-single">费用：{{item.expense ? item.expense + '元' : ''}}</view>
+									<view class="info-single attachment">附件：</view>
+									<view class="info-img" v-for="(attach, i) in item.attachment" :key="i">
+										<!-- <image :src="getImage(attach.img)" class="img"></image> -->
+									</view>
+								</view>
+							</view>
+						</view>
+				</view>
+			</view>
+			
+			<view class="form-btn" @click="goto('../add/record', {id:id,name:name,location:locationConvert(province, city, district),intro:intro})">
+				<view class="icon-add"></view>
+				<view class="txt">我来跟进</view>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -60,8 +57,17 @@
 				name: null,
 				intro: null,
 				updateTime: null,
-				recordList: []
+				recordList: [],
+				// 分页
+				params: {
+					pageIndex: 1,
+					pageSize: 5,
+					totalPage: 1
+				}
 			};
+		},
+		onShow() {
+			this.loadData()
 		},
 		onLoad(option) {
 			this.id = option.id
@@ -76,11 +82,27 @@
 				this.intro = _d.intro
 				this.updateTime = _d.updateTime
 			})
-			// 拜访记录分页列表
-			visitList({id: this.id}).then(res => {
-				console.log('visitRes:', res)
-				this.recordList = res.data.list
-			})
+		},
+		methods: {
+			loadData() {
+				console.log('~~', {id: this.id, ...this.params})
+				visitList({id: this.id, ...this.params}).then(res => {
+					let _d = res.data;
+					this.params.totalPage = _d.totalPage;
+					this.recordList.push(..._d.list);
+					if(this.params.totalPage > this.params.pageIndex) {
+						this.params.pageIndex++;
+					}
+				})
+			},
+			// 滚动加载
+			loadMore() {
+				console.log('loadMore')
+				if(this.params.totalPage >= this.params.pageIndex) {
+					this.loadData()
+					this.params.pageIndex++;
+				}
+			}
 		}
 	}
 </script>
@@ -93,6 +115,9 @@ page{
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
+	.scroll-wrap{
+		height: 100vh;
+	}
 	.main-top{
 		color: #FFFFFF;
 		padding: 20px 20px 20px 20px;

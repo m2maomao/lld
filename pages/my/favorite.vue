@@ -4,7 +4,7 @@
 			<view class="empty" v-if="!list.length>0">
 				<view class="txt">暂无收藏</view>
 			</view>
-			<view class="content-wrap" v-else v-for="(item, index) in list" :key="index">
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="content-wrap" v-else v-for="(item, index) in list" :key="index">
 				<view class="sub_content_wrap">
 					<view class="sub_title">{{item.title}}</view>
 					<view class="sub_info">
@@ -12,7 +12,7 @@
 						<view class="time">最近下单：{{formatTime(item.createTime)}}</view>
 					</view>
 				</view>
-			</view>
+			</scroll-view>
 		</view>
 	</view>
 </template>
@@ -23,24 +23,44 @@
 	export default {
 		data() {
 			return {
+				list: [],
 				params: {
 					pageIndex: 1,
-					pageSize: 10
-				},
-				list: []
+					pageSize: 20,
+					totalPage: 1
+				}
 			};
 		},
 		onShow() {
-			accountOpportunity({...this.params}).then(res => {
-				let _d = res.data;
-				this.list = _d.list;
-			})
+			this.loadData()
+		},
+		methods: {
+			loadData() {
+				accountOpportunity({...this.params}).then(res => {
+					let _d = res.data;
+					this.params.totalPage = _d.totalPage;
+					this.list.push(..._d.list);
+					if(this.params.totalPage > this.params.pageIndex) {
+						this.params.pageIndex++;
+					}
+				})
+			},
+			// 滚动加载
+			loadMore() {
+				if(this.params.totalPage >= this.params.pageIndex) {
+					this.loadData()
+					this.params.pageIndex++;
+				}
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
 .main-wrap{
+	.scroll-wrap{
+		height: 100vh; 
+	}
 	.empty{
 		width: 176px;
 		height: 95px;
