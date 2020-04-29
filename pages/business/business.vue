@@ -218,7 +218,7 @@ page{
 		.list_with_detail{
 			.menu{
 				position: fixed;//
-				top: 60px;//
+				top: 80px;// 视差
 				display: flex;
 				width: 100%;
 				.search_btn{
@@ -228,7 +228,7 @@ page{
 			}
 			.content{
 				position: fixed;//
-				top: 100px;//
+				top: 120px;// 视差
 				bottom:30px;//
 				left: 0px;//
 				right:0px;//
@@ -352,6 +352,10 @@ page{
 					color: #666666;
 					margin-top: 10px;
 					line-height: 20px;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 3; //需要控制的文本行数
+					overflow: hidden;
 				}
 				.sub_info{
 					margin-top: 10px;

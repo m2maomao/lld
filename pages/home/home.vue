@@ -6,7 +6,7 @@
 				<view class="top-info">
 					<view class="user-wrap">
 						<view class="name">早上好~,{{accountInfo.name}}</view>
-						<view class="avatar">
+						<view class="avatar" @click="goto('../my/setting/index', {})">
 							<img :src="getImage(accountInfo.avatar)">
 							<i v-if="accountInfo.gender.value === 1" class="icon boy"></i>
 							<i v-if="accountInfo.gender.value === 2" class="icon girl"></i>
@@ -19,11 +19,11 @@
 								<view class="number">{{orderAmount}}<view class="unit">元</view></view>
 						</view>
 						<view class="total-wrap">
-							<view class="box">
+							<view class="box" @click="goto('../my/favorite', {})">
 								<view class="title">收藏商机</view>
 								<view class="number">{{collectionNum}}<view class="unit">条</view></view>
 							</view>
-							<view class="box">
+							<view class="box" @click="gotoTab('../customer/customer', {tabSelected:1})">
 								<view class="title">新增潜在客户</view>
 								<view class="number">{{customerNum}}<view class="unit">个</view></view>
 							</view>
@@ -31,7 +31,7 @@
 								<view class="title">拜访跟进</view>
 								<view class="number">{{visitNum}}<view class="unit">次</view></view>
 							</view>
-							<view class="box">
+							<view class="box" @click="gotoTab('../customer/customer', {tabSelected:0})">
 								<view class="title">下单客户</view>
 								<view class="number">{{customerNum}}<view class="unit">个</view></view>
 							</view>

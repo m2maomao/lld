@@ -192,6 +192,11 @@
 		},
 		onShow() {
 			this.loadMore(2)
+			// 判断前置页面是否包含Tab切换
+			if(uni.getStorageSync('tabSelected')=== 0 || uni.getStorageSync('tabSelected')=== 1) {
+				this.tabSelected = uni.getStorageSync('tabSelected')
+				uni.removeStorageSync('tabSelected')
+			}
 		}
 	}
 </script>
@@ -214,7 +219,7 @@ page{
 		.list_with_detail{
 			.menu{
 				position: fixed;//
-				top: 60px;//
+				top: 80px;//
 				display: flex;
 				width: 100%;
 				.search_btn{
@@ -224,7 +229,7 @@ page{
 			}
 			.content{
 				position: fixed;//
-				top: 100px;//
+				top: 120px;//
 				bottom:30px;//
 				left: 0px;//
 				right:0px;//
@@ -346,6 +351,10 @@ page{
 					color: #666666;
 					margin-top: 10px;
 					line-height: 20px;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 3; //需要控制的文本行数
+					overflow: hidden;
 				}
 				.sub_info{
 					margin-top: 10px;

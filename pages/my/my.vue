@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="user-wrap">
+		<view class="user-wrap" @click="goto('./setting/index', {})">
 			<view class="avatar">
 				<img :src="getImage(accountInfo.avatar)">
 				<i class="icon boy" v-if="accountInfo.gender.value === 1"></i>

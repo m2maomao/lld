@@ -5,7 +5,7 @@ import store from './store'
 // 把vuex定义成全局组件
 Vue.prototype.$store = store
 
-import { formatDate, goto, locationConvert, getImage } from './libs/tools.js'
+import { formatDate, goto, gotoTab, locationConvert, getImage } from './libs/tools.js'
 
 Vue.config.productionTip = false
 
@@ -19,6 +19,11 @@ Vue.prototype.formatTime = (t) => {
 // 全局跳转方法
 Vue.prototype.goto = (url, params) => {
 	goto(url, params)
+}
+
+// 全局跳转Tab方法
+Vue.prototype.gotoTab = (url, params) => {
+	gotoTab(url, params)
 }
 
 // 地区转换

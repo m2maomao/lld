@@ -27,6 +27,15 @@ export function goto (url, data) {
 	})
 }
 
+// 全局跳转到Tab页
+export function gotoTab (url, data) {
+	const {tabSelected} = data
+	uni.setStorageSync('tabSelected', tabSelected)
+	uni.switchTab({
+		url
+	})
+}
+
 function param(data) {
 	let url = ''
 	for(let k in data) {

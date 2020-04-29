@@ -14,7 +14,7 @@
 
 <script>
 	import { accountUpdateName } from '../../../api/api.js';
-	import { mapMutations } from 'vuex'
+	import { mapState, mapMutations } from 'vuex'
 	
 	export default {
 		data() {
@@ -23,7 +23,7 @@
 			};
 		},
 		computed:{
-			
+			...mapState(['accountInfo'])
 		},
 		onShow() {
 			
@@ -41,6 +41,9 @@
 					}, 1000)
 				})
 			}
+		},
+		mounted() {
+			this.name = this.accountInfo.name
 		}
 	}
 </script>

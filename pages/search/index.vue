@@ -3,90 +3,104 @@
 		<view class="container">
 			<view class="searchBox">
 				<input class="uni-input" placeholder="搜索..." v-model="searchWord" />
-				<i class="icon-search"></i>
+				<i class="icon-search" @click="fetchData"></i>
 			</view>
 			<view class="content">
 				
-				<!-- 暂无结果 -->
-				<view class="empty" v-show="emptyFlag">
-					<view class="txt">暂无结果</view>
+				<!-- Tab -->
+				<view class="menu">
+					<view class="btn_wrap">
+						<view :class="['btn', index === tabSelected ? 'active' : '']" v-for="(tab, index) in tabMenu" @click="tabHandle(index)" :key="index">{{tab}}</view>
+					</view>
+					<view class="search_btn" @click="showSearch"></view>
 				</view>
-				<!-- /暂无结果 -->
+				<!-- /Tab -->
 				
-				<!-- 企业招标 -->
-				<view class="tendering" v-if="tabMenuSelected === '企业招标'">
-					<view
-						class="sub_content_wrap"
-						v-for="(item, index) in enterpriseList"
-						:key="index"
-						@click="goto('../business/tenderingDetail', {id: item.id})"
-					>
-						<view class="sub_title">{{item.title}}</view>
-						<view class="sub_info">
-							<view class="area">
-								{{locationConvert(item.province, item.city, item.district)}}
+				<!-- 最外层容器 -->
+				<div class="boss">
+					<!-- 暂无结果 -->
+					<view class="empty" v-show="emptyFlag">
+						<view class="txt">暂无结果</view>
+					</view>
+					<!-- /暂无结果 -->
+					
+					<!-- 企业招标 -->
+					<view class="tendering" v-if="tabMenuSelected === '企业招标'">
+						<view
+							class="sub_content_wrap"
+							v-for="(item, index) in enterpriseList"
+							:key="index"
+							@click="goto('../business/tenderingDetail', {id: item.id})"
+						>
+							<view class="sub_title">{{item.title}}</view>
+							<view class="sub_info">
+								<view class="area">
+									{{locationConvert(item.province, item.city, item.district)}}
+								</view>
+								<view class="time">最近下单：{{formatTime(item.createTime)}}</view>
 							</view>
-							<view class="time">最近下单：{{formatTime(item.createTime)}}</view>
 						</view>
 					</view>
-				</view>
-				<!-- /企业招标 -->
-				
-				<!-- 公海客户 -->
-				<view class="customer" v-if="tabMenuSelected === '公海客户' && !emptyFlag">
-					<view
-						class="sub_content_wrap"
-						v-for="(item, index) in customerList"
-						:key="index"
-						@click="goto('../business/customerDetail', {id: item.id})"
-					>
-						<view class="sub_title">{{item.name}}</view>
-						<view class="sub_content">{{item.intro}}</view>
-						<view class="sub_info">
-							<view class="area">
-								{{locationConvert(item.province, item.city, item.district)}}
+					<!-- /企业招标 -->
+					
+					<!-- 公海客户 -->
+					<view class="customer" v-if="tabMenuSelected === '公海客户' && !emptyFlag">
+						<view
+							class="sub_content_wrap"
+							v-for="(item, index) in customerList"
+							:key="index"
+							@click="goto('../business/customerDetail', {id: item.id})"
+						>
+							<view class="sub_title">{{item.name}}</view>
+							<view class="sub_content">{{item.intro}}</view>
+							<view class="sub_info">
+								<view class="area">
+									{{locationConvert(item.province, item.city, item.district)}}
+								</view>
+								<view class="time">最近跟进：{{formatTime(item.updateTime)}}</view>
 							</view>
-							<view class="time">最近跟进：{{formatTime(item.updateTime)}}</view>
 						</view>
 					</view>
-				</view>
-				<!-- /公海客户 -->
+					<!-- /公海客户 -->
+					
+					<!-- 合作客户 -->
+					<view class="cooperative" v-if="tabMenuSelected === '合作客户' && !emptyFlag">
+						<view
+							class="sub_content_wrap"
+							v-for="(item, index) in cooperationCustomerData.list"
+							:key="index"
+							@click="goto('../customer/cooperativeDetail', {id: item.id})"
+						>
+							<view class="sub_title">{{item.name}}</view>
+							<view class="sub_content" v-html="item.intro"></view>
+							<view class="sub_info">
+								<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+								<view class="time">最近下单：{{formatTime(item.updateTime)}}</view>
+							</view>
+						</view>
+					</view>
+					<!-- /合作客户 -->
+					
+					<!-- 潜在客户 -->
+					<view class="potential" v-if="tabMenuSelected === '潜在客户' && !emptyFlag">
+						<view
+							class="sub_content_wrap"
+							v-for="(item, index) in potentialCustomerData.list"
+							:key="index"
+							@click="goto('../customer/potentialDetail', {id: item.id})"
+						>
+							<view class="sub_title">{{item.name}}</view>
+							<view class="sub_content">{{item.intro}}</view>
+							<view class="sub_info">
+								<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
+								<view class="time">最近跟进：{{formatTime(item.createTime)}}</view>
+							</view>
+						</view>
+					</view>
+					<!-- /潜在客户 -->
+				</div>
+				<!-- /最外层容器 -->
 				
-				<!-- 合作客户 -->
-				<view class="cooperative" v-if="tabMenuSelected === '合作客户' && !emptyFlag">
-					<view
-						class="sub_content_wrap"
-						v-for="(item, index) in cooperationCustomerData.list"
-						:key="index"
-						@click="goto('../customer/cooperativeDetail', {id: item.id})"
-					>
-						<view class="sub_title">{{item.name}}</view>
-						<view class="sub_content" v-html="item.intro"></view>
-						<view class="sub_info">
-							<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
-							<view class="time">最近下单：{{formatTime(item.updateTime)}}</view>
-						</view>
-					</view>
-				</view>
-				<!-- /合作客户 -->
-				
-				<!-- 潜在客户 -->
-				<view class="potential" v-if="tabMenuSelected === '潜在客户' && !emptyFlag">
-					<view
-						class="sub_content_wrap"
-						v-for="(item, index) in potentialCustomerData.list"
-						:key="index"
-						@click="goto('../customer/potentialDetail', {id: item.id})"
-					>
-						<view class="sub_title">{{item.name}}</view>
-						<view class="sub_content">{{item.intro}}</view>
-						<view class="sub_info">
-							<view class="area">{{locationConvert(item.province, item.city, item.district)}}</view>
-							<view class="time">最近跟进：{{formatTime(item.createTime)}}</view>
-						</view>
-					</view>
-				</view>
-				<!-- /潜在客户 -->
 			</view>
 		</view>
 	</view>
@@ -140,14 +154,32 @@
 					pageSize: 20,
 					pageIndex: 1,
 					keyword: ''
-				}
+				},
+				// tab
+				tabMenu: [],
+				tabMenuTemp: ['企业招标', '公海客户', '合作客户', '潜在客户'],
+				tabSelected: 0
 			};
 		},
 		onLoad(option) {
 			this.searchWord = decodeURIComponent(option.searchWord)
 			this.tabMenuSelected = decodeURIComponent(option.tabMenuSelected)
+			// 判断传入Tab，构建当前Tab
+			if (this.tabMenuSelected === this.tabMenuTemp[0] || this.tabMenuSelected === this.tabMenuTemp[1]) {
+				this.tabMenu.push(this.tabMenuTemp[0], this.tabMenuTemp[1])
+				this.tabSelected = this.tabMenu.indexOf(this.tabMenuSelected)
+			} else if (this.tabMenuSelected === this.tabMenuTemp[2] || this.tabMenuSelected === this.tabMenuTemp[3]) {
+				this.tabMenu.push(this.tabMenuTemp[2], this.tabMenuTemp[3])
+				this.tabSelected = this.tabMenu.indexOf(this.tabMenuSelected)
+			}
 		},
 		methods:{
+			// tab切换
+			tabHandle(index) {
+				this.tabSelected = index
+				this.tabMenuSelected = this.tabMenu[index]
+				this.fetchData()
+			},
 			fetchData() {
 				switch(this.tabMenuSelected) {
 					case '企业招标':
@@ -233,11 +265,71 @@ page{
 		}
 	}
 	.content{
-		padding: 0 20px;
-		flex: 1;
-		background: #FFFFFF;
-		border-top-left-radius: 22px;
-		border-top-right-radius: 22px;
+		.boss{
+			padding: 0 20px;
+			flex: 1;
+			background: #FFFFFF;
+			border-top-left-radius: 22px;
+			border-top-right-radius: 22px;
+			overflow: hidden;
+			min-height: calc(100vh - (94px + 30px));
+		}
+		
+		// .menu{
+		// 	position: fixed;//
+		// 	top: 80px;// 视差
+		// 	display: flex;
+		// 	width: 100%;
+		// 	.search_btn{
+		// 		opacity: 1;
+		// 		transition: opacity .2s;
+		// 	}
+		// }
+		.menu{
+			display: flex;
+			justify-content: space-between;
+			.btn_wrap{
+				display: flex;
+				flex-direction: row;
+				padding: 0 10px;
+				margin-bottom: 10px;
+				align-items: center;
+				position: relative;
+			}
+			.btn{
+				height: 30px;
+				line-height: 30px;
+				font-size: 14px;
+				color: #FFFFFF;
+				padding:0 8px;
+				position: relative;
+				margin-right: 20px;
+				&.active{
+					font-size: 16px;
+					&::after{
+						content:' ';
+						position: absolute;
+						width: 14px;
+						height: 2px;
+						background: #FFFFFF;
+						bottom: -3px;
+						left: 50%;
+						margin-left: -7px;
+						border-radius: 1px;
+					}
+				}
+			}
+			.search_btn{
+				width: 16px;
+				height: 16px;
+				padding: 7px;
+				background: url(../../static/@2xsearch-white.png) center center / 16px 16px no-repeat;
+				position: absolute;
+				right: 10px;
+				opacity: 0;
+				transition: opacity; 
+			}
+		}
 		.empty{
 			width: 176px;
 			height: 95px;
