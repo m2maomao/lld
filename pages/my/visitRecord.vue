@@ -19,7 +19,7 @@
 							<view class="info-single">费用：{{record.expense}}元</view>
 							<view class="info-single">附件：</view>
 							<view class="info-img">
-								<view class="file">
+								<view class="file" v-if="record.attachment.length > 0">
 									<img :src="getImage(attach)" class="img" v-for="(attach, i) in record.attachment" :key="i"/>
 								</view>
 							</view>
