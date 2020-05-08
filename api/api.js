@@ -136,3 +136,8 @@ export const accountUpdateName = (data) => {
 export const accountUpdateResetPass = (data) => {
 	return request('/api/account/update/resetPass', {...data}, 'POST')
 }
+
+// 我的拜访列表
+export const accountVisit = (params) => {
+	return request('/api/account/visit', {...params}, 'GET')
+}

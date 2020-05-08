@@ -27,7 +27,7 @@
 								<view class="title">新增潜在客户</view>
 								<view class="number">{{customerNum}}<view class="unit">个</view></view>
 							</view>
-							<view class="box">
+							<view class="box" @click="goto('../my/visitRecord', {})">
 								<view class="title">拜访跟进</view>
 								<view class="number">{{visitNum}}<view class="unit">次</view></view>
 							</view>
