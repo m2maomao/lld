@@ -111,10 +111,10 @@
 					this.district = _d.district;
 					this.intro = _d.intro;
 					// 判断当前页是否还有数据
-					if (_d.visitRecord.length > 0) {
+					if (this.visitRecord.length > 0 && this.params.pageIndex!=1) {
 						this.visitRecord.push(..._d.visitRecord);
 					}
-					if (this.orderRecord.length > 0) {
+					if (this.orderRecord.length > 0 && this.params.pageIndex!=1) {
 						this.orderRecord.push(..._d.orderRecord);
 					}
 				})
@@ -143,6 +143,7 @@
 				this.intro = _d.intro;
 				this.visitRecord = _d.visitRecord;
 				this.orderRecord = _d.orderRecord;
+				this.params.pageIndex++;
 			})
 		}
 	}

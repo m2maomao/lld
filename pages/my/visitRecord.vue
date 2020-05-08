@@ -16,7 +16,7 @@
 						<view class="info-wrap">
 							<view class="info-title">{{record.matter}}</view>
 							<view class="info-single">摘要：{{record.summary}}</view>
-							<view class="info-single">费用：{{record.expense}}元</view>
+							<view class="info-single" v-if="record.expense">费用：{{record.expense}}元</view>
 							<view class="info-single">附件：</view>
 							<view class="info-img">
 								<view class="file" v-if="record.attachment.length > 0">
