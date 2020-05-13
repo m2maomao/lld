@@ -12,6 +12,10 @@
 					<view class="form-item-label password-icon">密码</view>
 					<view class="form-item-input"><input password="true" placeholder="请输入密码" v-model="password" /></view>
 				</view>
+				<view class="agreement">
+					<view :class='["icon", checked ? "checked" : null]' @click="toggleChecked"></view>
+					<view class="txt">请阅读并同意以下<view class="link" @click="goto('agreement', {})">服务协议</view></view>
+				</view>
 				<view class="form-button" @click="login">登录</view>
 				<navigator url="findPassword" open-type="navigate" class="forgot-password" hover-class="none">忘记密码?</navigator>
 			</view>
@@ -32,7 +36,8 @@
 		data() {
 			return {
 				username: '',
-				password: ''
+				password: '',
+				checked: true
 			}
 		},
 		computed:{
@@ -49,8 +54,19 @@
 		onShow() {
 		},
 		methods: {
+			// 切换协议选中状态
+			toggleChecked() {
+				this.checked = !this.checked
+			},
 			...mapMutations(['setAccountInfo']),
 			login() {
+				if (!this.checked) {
+					uni.showToast({
+						icon:'none',
+						title: '您必须同意服务协议!'
+					})
+					return
+				}
 				userLogin({
 					username: this.username,
 					password: this.password
@@ -161,7 +177,7 @@ page{
 			flex-direction: row-reverse;
 		}
 		.form-button{
-			margin-top: 30px;
+			margin-top: 20px;
 			height: 40px;
 			line-height: 40px;
 			text-align: center;
@@ -169,6 +185,30 @@ page{
 			color: #FFFFFF;
 			border-radius: 22px;
 			background: #002140;
+		}
+		.agreement{
+			margin-top: 10px;
+			font-size: 12px;
+			line-height: 14px;
+			color: #666666;
+			display: flex;
+			align-items: center;
+			.icon{
+				width: 14px;
+				height: 14px;
+				margin-right: 5px;
+				background: url(../../static/icon-check-off@2x.png) center center / 100% auto no-repeat;
+				&.checked{
+					background: url(../../static/icon-check-on@2x.png) center center / 100% auto no-repeat;
+				}
+			}
+			.txt{
+				display: flex;
+				flex-direction: row;
+				.link{
+					text-decoration: underline;
+				}
+			}
 		}
 	}
 }

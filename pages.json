@@ -36,6 +36,14 @@
 			}
 		},
 		{
+			"path": "pages/login/agreement",
+			"style": {
+				"navigationBarBackgroundColor": "#002140",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "服务协议"
+			}
+		},
+		{
 			"path": "pages/my/setting/changePassword",
 			"style": {
 				"navigationBarBackgroundColor": "#FFFFFF",
